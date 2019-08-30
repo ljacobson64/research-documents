@@ -221,7 +221,8 @@
     \item If $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated
           for any number of perturbations.
     \item Thus, $\psi$ and $\psi^+$ only need to be calculated once in order to
-          be able to calculate the effects of perturbing the entire geometry.
+          be able to calculate the effects of making a perturbation anywhere in
+          the entire geometry.
   \end{itemize}
 \end{frame}
 
@@ -408,7 +409,8 @@
   \end{columns}
   \begin{itemize}
     \item Contributon shows most important paths between source and detector
-    \item Note that the opposite angle must be used for the adjoint flux in order to calculate the contributon correctly
+    \item Note that the opposite angle must be used for the adjoint flux in
+          order to calculate the contributon correctly
   \end{itemize}
 \end{frame}
 
@@ -625,9 +627,33 @@
 % ==============================================================================
 
 \begin{frame}
-  \frametitle{Future Work}
+  \frametitle{Future Work: Math}
   \begin{itemize}
+    \item Decision space:
+    \begin{itemize}
+      \item What kind of changes should be allowed?
+      \item What if some materials must remain fixed?
+      \item What if only a certain volume of a given material is allowed to be
+            used?
+    \end{itemize}
+    \item Objective function:
+    \begin{itemize}
+      \item What if the overall repsonse is the sum of two responses?
+      \item Or the product? Or the quotient, or some other combination?
+      \item Or a simple response, but with the contraint that a different
+            response must be kept below a certain threshold?
+    \end{itemize}
+  \end{itemize}
+\end{frame}
 
+\begin{frame}
+  \frametitle{Future Work: Automation}
+  \begin{itemize}
+    \item The real goal is an automated system which runs transport, calculates
+          $\delta R$, decides how to change the geometry, reruns transport, and
+          continues until the geometry has converged to the optimal solution.
+    \item It's unclear what kind of optimization algorithm would be correct to
+          use. Conjugate gradient method?
   \end{itemize}
 \end{frame}
 
