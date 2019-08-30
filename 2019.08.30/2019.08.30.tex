@@ -14,17 +14,17 @@
 
 \begin{document}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% ==============================================================================
 % Title page
+% ==============================================================================
 
 \begin{frame}
   \titlepage
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% ==============================================================================
 % Introduction
+% ==============================================================================
 
 \begin{frame}
   \frametitle{Research Aims}
@@ -45,9 +45,9 @@
   \end{enumerate}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% ==============================================================================
 % Math section
+% ==============================================================================
 
 \begin{frame}
   \frametitle{Transport Equation}
@@ -119,11 +119,13 @@
   \end{itemize}
   Perturbed total cross section:
   \begin{equation}
-    \bar{\sigma}_t \equiv \sigma_t\left(\vec{r},E\right) + \delta\sigma_t\left(\vec{r},E\right)
+    \bar{\sigma}_t \equiv
+    \sigma_t\left(\vec{r},E\right) + \delta\sigma_t\left(\vec{r},E\right)
   \end{equation}
   Perturbed scattering cross section:
   \begin{equation}
-    \bar{\sigma}_s \equiv \sigma_s\left(\vec{r},E\right) + \delta\sigma_s\left(\vec{r},E\right)
+    \bar{\sigma}_s \equiv
+    \sigma_s\left(\vec{r},E\right) + \delta\sigma_s\left(\vec{r},E\right)
   \end{equation}
   Angular flux in the perturbed system:
   \begin{equation}
@@ -205,7 +207,8 @@
     \delta R & = \bar{R} - R \\
              & = \left<\bar{\psi},q^+\right> - \left<\psi,q^+\right> \\
              & = \left<\delta\psi,q^+\right> \\
-             & \stackrel{\includegraphics[height=\fontcharht\font`\B]{thinking-face.png}}{=} \left<\psi^+,-\delta H\psi\right>
+             & \stackrel{\includegraphics[height=\fontcharht\font`\B]{thinking-face.png}}{=}
+               \left<\psi^+,-\delta H\psi\right>
   \end{split}\end{equation}
 \end{frame}
 
@@ -215,24 +218,90 @@
     \delta R = \left<\psi^+,-\delta H\psi\right>
   \end{equation*}
   \begin{itemize}
-    \item If $\psi$ and $\psi^+$ are known, then $dR$ can be calculated for any
-          number of perturbations.
+    \item If $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated
+          for any number of perturbations.
     \item Thus, $\psi$ and $\psi^+$ only need to be calculated once in order to
           be able to calculate the effects of perturbing the entire geometry.
   \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Test problem section
+% ==============================================================================
+% Implementation section
+% ==============================================================================
 
 \begin{frame}
-  \frametitle{Test Problem Geometry}
-  \begin{figure}
-    \includegraphics[trim={0.7in 0.2in 0.9in 0.45in},clip,scale=0.45]{images/material_map.png}
-  \end{figure}
+  \frametitle{ADVANTG}
   \begin{itemize}
-    \item Polyethylene (HDPE) is a neutron moderator due to its high hydrogen content
+    \item ADVANTG -- AutomateD VAriaNce reducTion Generator
+    \item Was mainly developed to provide users with MCNP weight windows using
+          the CADIS and FW-CADIS methodologies
+    \item Uses the 3D discrete ordinates deterministic radiation transport code
+          Denovo under the hood
+    \item Provides a very convenient way for users to run forward and adjoint
+          deterministic transport on MCNP models (no need to use its weight
+          window-producing capability)
+    \item Has a very convenient undocumented feature which writes the full
+          5-dimensional $(E,z,y,x,\hat{\Omega})$ forward and adjoint angular
+          fluxes to HDF5 files
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ADVANTG Implementation}
+  \begin{itemize}
+    \item ADVANTG can be configured to provide most of the information needed to
+          calculate $\delta R$, but not all of it, so the Python source code
+          needed to be modified to have it output this additional information.
+    \item The calculation of $\delta R$ takes place outside ADVANTG. This code
+          was originally written in Python, but it was rewritten in C++ because
+          it was far too slow.
+    \item The following slides show the results for a simple test problem.
+  \end{itemize}
+\end{frame}
+
+% ==============================================================================
+% Test problem section
+% ==============================================================================
+
+\begin{frame}
+  \frametitle{Test Problem Overview}
+  \vskip-0.35in
+  \begin{columns}
+    \column{0.35\textwidth}
+    \begin{itemize}
+      \vskip 0.1in
+      \item At Phoenix, I was given the task to model one of Phoenix's DD
+            solid-target neutron generators and maximize the ${}^{235}\text{U}$
+            fission rate in a region behind a thin iron wall.
+    \end{itemize}
+    \column{0.65\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.2in 0.9in 0.45in},clip,scale=0.36]{images/material_map.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Variables: location of target, moderator material (just one)
+    \item The ${}^{235}\text{U}$ fission cross section is highest at thermal
+          energies, but DD neutrons are produced at \tildecenter 2.45 MeV, so a
+          moderator is needed
+    \item I thought to myself, ``it's really too bad nobody had ever used a
+          perturbed version of the transport equation to avoid needing to run
+          MCNP 50 times to optimize geometry''
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Test Problem Construction}
+  \begin{itemize}
+    \item The original problem was comprised entirely of right circular
+          cylinders (RCCs). Since ADVANTG requires a cartesian mesh to pass to
+          Denovo, the geometry was modified to be all rectangular
+          parallelepipeds (RPPs) to avoid having mesh elements with mixed
+          materials.
+    \item Spatial mesh has $43 \times 44 \times 44 = \text{83,248}$ elements
+    \item Scalar flux has 2,081,200 values (25 energy groups)
+    \item Angular flux has 266,393,600 values (128 angles)
+    \item The angular forward and adjoint flux take up 4 GB of space
   \end{itemize}
 \end{frame}
 
@@ -255,15 +324,15 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Source and Response Spectra}
+  \frametitle{Source and Response Energy Spectra}
   \begin{columns}[c]
-    \column{0.25\textwidth}
+    \column{0.3\textwidth}
     \begin{itemize}
       \item Energy groups go from high to low
       \item Source is the DD fusion spectrum (\tildecenter 2.45 MeV)
-      \item Response is the ${}^{\text{235}}\text{U}$ fission spectrum
+      \item Response is the ${}^{235}\text{U}$ fission spectrum
     \end{itemize}
-    \column{0.75\textwidth}
+    \column{0.7\textwidth}
     \begin{figure}
       \includegraphics[trim={0.4in 0.2in 0.75in 0.4in},clip,scale=0.45]{images/spectra_lin.png}
     \end{figure}
@@ -291,6 +360,7 @@
   \begin{itemize}
     \item Group 2: Highest neutron energy group in problem
     \item Group 26: Lowest neutron energy group (thermal)
+    \item Ray effects clearly visible
   \end{itemize}
 \end{frame}
 
@@ -313,8 +383,8 @@
     \end{figure}
   \end{columns}
   \begin{itemize}
-    \item Group 2: Highest neutron energy group in problem
-    \item Group 26: Lowest neutron energy group (thermal)
+    \item Adjoint "particles" start at the detector with a fission cross section
+          spectrum (i.e. mostly thermal neutrons) and scatter upwards to higher energies
   \end{itemize}
 \end{frame}
 
@@ -449,7 +519,5 @@
     \end{figure}
   \end{columns}
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
