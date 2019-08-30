@@ -1,0 +1,455 @@
+\documentclass[t]{beamer}
+\usefonttheme{serif}
+\usetheme[white]{Wisconsin}
+\title{Research Update}
+%\subtitle{}
+\author{Lucas Jacobson}
+\institute{University of Wisconsin--Madison}
+\date{30 August 2019}
+
+\usepackage{amsmath}
+\usepackage{textcomp}
+
+\newcommand{\tildecenter}{\raisebox{0.5ex}{\texttildelow}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Title page
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Introduction
+
+\begin{frame}
+  \frametitle{Research Aims}
+  \textbf{Using a novel methodology, create a toolset that can be used to
+  automate the optimization of geometry to achieve specific objectives derived
+  from nuclear responses.}
+  \newline\newline
+  Here is the current plan for how this will be done:
+  \begin{enumerate}[1]
+    \item Use perturbation theory to develop a perturbed version of the neutron
+          transport equation in which the perturbation in the detector response
+          can be expressed in terms of a material or geometry perturbation.
+    \item Use a deterministic radiation transport code to calculate the
+          quantities necessary to calculate the perturbation in the detector
+          response.
+    \item Use shape optimization methods to iteratively alter the geometry in
+          order to guide it towards the most optimal configuration.
+  \end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Math section
+
+\begin{frame}
+  \frametitle{Transport Equation}
+  \begin{itemize}
+    \item The time-independent transport equation is a balance between particles
+          leaving a region of phase space and particles entering it.
+  \end{itemize}
+  \vskip-0.1in
+  \begin{multline}
+    \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
+    \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
+    \iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\cdot\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}^\prime dE^\prime =
+    q\left(\vec{r},\hat{\Omega},E\right)
+  \end{multline}
+  \vskip-0.1in
+  \begin{scriptsize}\begin{itemize}
+    \item Independent variable: angular flux
+          $\psi\left(\vec{r},\hat{\Omega},E\right)$
+    \item Total cross section:
+          $\sigma_t\left(\vec{r},E\right)$
+    \item Scattering cross section:
+          $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\cdot\hat{\Omega},E^\prime\rightarrow E\right)$
+    \item Net removal due to streaming:
+          $\hat{\Omega}\cdot\vec{\nabla}\psi$
+    \item Removal due to collision:
+          $\sigma_t\psi$
+    \item Net gain due to scattering:
+          $\iint\sigma_s\psi d\hat{\Omega}^\prime dE^\prime$
+    \item Gain due to external sources:
+          $q$
+  \end{itemize}\end{scriptsize}
+  In operator notation:
+  \begin{equation}
+    H\psi = q
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Adjoint Transport Equation}
+  \begin{multline}
+    -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
+    \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) - \\
+    \iint\sigma_s\left(\vec{r},\hat{\Omega}\cdot\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}^\prime dE^\prime =
+    q^+\left(\vec{r},\hat{\Omega},E\right)
+  \end{multline}
+  \begin{itemize}
+    \item The adjoint flux $\psi^+$ in a region of phase space is the importance
+          of that region of phase space to the detector $q^+$.
+    \item In the adjoint system, particles stream outwards from the detector and
+          gain energy when they scatter.
+  \end{itemize}
+  In operator notation:
+  \begin{equation}
+    H^+\psi^+ = q^+
+  \end{equation}
+  Adjoint identity (from the definition of the adjoint):
+  \begin{equation}
+    \left<\psi,q^+\right> = \left<\psi^+,q\right>
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbations}
+  \begin{itemize}
+    \item Small perturbations in the cross sections result in small
+          perturbations in the angular flux.
+    \item Notation: perturbed values are written as $\bar{x}$, and
+          the perturbation in values are written as $\delta x$.
+  \end{itemize}
+  Perturbed total cross section:
+  \begin{equation}
+    \bar{\sigma}_t \equiv \sigma_t\left(\vec{r},E\right) + \delta\sigma_t\left(\vec{r},E\right)
+  \end{equation}
+  Perturbed scattering cross section:
+  \begin{equation}
+    \bar{\sigma}_s \equiv \sigma_s\left(\vec{r},E\right) + \delta\sigma_s\left(\vec{r},E\right)
+  \end{equation}
+  Angular flux in the perturbed system:
+  \begin{equation}
+    \bar{\psi} \equiv \psi + \delta\psi
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbed Transport Equation}
+  Transport equation repeated:
+  \begin{equation*}
+    \hat{\Omega}\cdot\vec{\nabla}\psi +
+    \sigma_t\psi -
+    \iint\sigma_s\psi d\hat{\Omega}^\prime dE^\prime =
+    q
+  \end{equation*}
+  Transport equation in the perturbed system:
+  \begin{equation}
+    \hat{\Omega}\cdot\vec{\nabla}\bar{\psi} +
+    \bar{\sigma}_t\bar{\psi} -
+    \iint\bar{\sigma}_s\bar{\psi} d\hat{\Omega}^\prime dE^\prime =
+    q
+  \end{equation}
+  \begin{equation}
+    \hat{\Omega}\cdot\vec{\nabla}\left(\psi + \delta\psi\right) +
+    \left(\sigma_t + \delta\sigma_t\right)\left(\psi + \delta\psi\right) -
+    \iint\left(\sigma_s + \delta\sigma_s\right)\left(\psi + \delta\psi\right)d\hat{\Omega}^\prime dE^\prime =
+    q
+  \end{equation}
+  Subtract the original transport equation:
+  \begin{multline}
+    \hat{\Omega}\cdot\vec{\nabla}\psi +
+    \left(\sigma_t\delta\psi + \delta\sigma_t\psi + \delta\sigma_t\delta\psi\right) - \\
+    \iint\left(\sigma_s\delta\psi + \delta\sigma_s\psi + \delta\sigma_s\delta\psi\right)d\hat{\Omega}^\prime dE^\prime =
+    0
+  \end{multline}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbed Transport Equation (Continued)}
+  In perturbation theory it is common to discard the second-order terms:
+  \begin{equation}
+    \hat{\Omega}\cdot\vec{\nabla}\psi +
+    \left(\sigma_t\delta\psi + \delta\sigma_t\psi\right) -
+    \iint\left(\sigma_s\delta\psi + \delta\sigma_s\psi\right)d\hat{\Omega}^\prime dE^\prime =
+    0
+  \end{equation}
+  Finally, after rearranging terms:
+  \begin{equation}
+    \hat{\Omega}\cdot\vec{\nabla}\psi +
+    \sigma_t\delta\psi -
+    \iint\sigma_s\delta\psi d\hat{\Omega}^\prime dE^\prime =
+    -\left(\delta\sigma_t\psi - \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime\right)
+  \end{equation}
+  The perturbed transport equation looks very similar to the original transport
+  equation: \textbf{the perturbation in the angular flux can be calculated by
+  solving the transport equation with the unperturbed cross sections and with an
+  external source equal to
+  $-\left(\delta\sigma_t\psi - \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime\right)$.}
+
+  In operator notation:
+  \begin{equation}
+    H\delta\psi = -\delta H\psi
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbed Detector Response}
+  Unperturbed detector response:
+  \begin{equation}
+    R = \left<\psi,q^+\right> = \left<\psi^+,q\right>
+  \end{equation}
+  Perturbed detector response:
+  \begin{equation}
+    \bar{R} = \left<\bar{\psi},q^+\right> = \left<\bar{\psi}^+,q\right>
+  \end{equation}
+  Perturbation in the detector response:
+  \begin{equation}\begin{split}
+    \delta R & = \bar{R} - R \\
+             & = \left<\bar{\psi},q^+\right> - \left<\psi,q^+\right> \\
+             & = \left<\delta\psi,q^+\right> \\
+             & \stackrel{\includegraphics[height=\fontcharht\font`\B]{thinking-face.png}}{=} \left<\psi^+,-\delta H\psi\right>
+  \end{split}\end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Math Summary}
+  \begin{equation*}
+    \delta R = \left<\psi^+,-\delta H\psi\right>
+  \end{equation*}
+  \begin{itemize}
+    \item If $\psi$ and $\psi^+$ are known, then $dR$ can be calculated for any
+          number of perturbations.
+    \item Thus, $\psi$ and $\psi^+$ only need to be calculated once in order to
+          be able to calculate the effects of perturbing the entire geometry.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Test problem section
+
+\begin{frame}
+  \frametitle{Test Problem Geometry}
+  \begin{figure}
+    \includegraphics[trim={0.7in 0.2in 0.9in 0.45in},clip,scale=0.45]{images/material_map.png}
+  \end{figure}
+  \begin{itemize}
+    \item Polyethylene (HDPE) is a neutron moderator due to its high hydrogen content
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Source and Response Location}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/source_total.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/response_total.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Source is at the end of the vacuum tube
+    \item Response is behind the thin layer of iron
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Source and Response Spectra}
+  \begin{columns}[c]
+    \column{0.25\textwidth}
+    \begin{itemize}
+      \item Energy groups go from high to low
+      \item Source is the DD fusion spectrum (\tildecenter 2.45 MeV)
+      \item Response is the ${}^{\text{235}}\text{U}$ fission spectrum
+    \end{itemize}
+    \column{0.75\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.4in 0.2in 0.75in 0.4in},clip,scale=0.45]{images/spectra_lin.png}
+    \end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scalar Forward Flux ($\phi$)}
+  \vskip-0.25in
+  \begin{equation}
+    %\phi\left(\vec{r},E\right) = \int\psi\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}
+    \phi = \int\psi d\hat{\Omega}
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \frame{\includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/scalar_flux_fwd_g02.png}}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \frame{\includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/scalar_flux_fwd_g26.png}}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Group 2: Highest neutron energy group in problem
+    \item Group 26: Lowest neutron energy group (thermal)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scalar Adjoint Flux ($\phi^+$)}
+  \vskip-0.25in
+  \begin{equation}
+    %\phi^+\left(\vec{r},E\right) = \int\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}
+    \phi^+ = \int\psi^+d\hat{\Omega}
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/scalar_flux_adj_g02.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/scalar_flux_adj_g26.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Group 2: Highest neutron energy group in problem
+    \item Group 26: Lowest neutron energy group (thermal)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scalar Contributon Flux ($\phi_{contrib}$)}
+  \vskip-0.25in
+  \begin{equation}
+    %\phi_{contrib}\left(\vec{r},E\right) = \int\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}
+    \phi_{contrib} = \int\psi\psi^+d\hat{\Omega}
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/scalar_flux_con_g02.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/scalar_flux_con_g26.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Contributon shows most important paths between source and detector
+    \item Note that the opposite angle must be used for the adjoint flux in order to calculate the contributon correctly
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Forward Current ($\vec{J}$)}
+  \vskip-0.25in
+  \begin{equation}
+    %\vec{J}\left(\vec{r},E\right) = \int\psi\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega}d\hat{\Omega}
+    \vec{J} = \int\psi\hat{\Omega}d\hat{\Omega}
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/current_fwd_g02.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/current_fwd_g26.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Current shows the net directionality of the flux
+    \item Fast flux radiates outward from the source
+    \item Thermal flux is very isotropic within the moderator region
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Adjoint Current ($\vec{J}^+$)}
+  \vskip-0.25in
+  \begin{equation}
+    %\vec{J}^+\left(\vec{r},E\right) = \int\psi^+\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega}d\hat{\Omega}
+    \vec{J}^+ = \int\psi^+\hat{\Omega}d\hat{\Omega}
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/current_adj_g02.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/current_adj_g26.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Adjoint current shows the net directionality of the adjoint flux
+    \item Adjoint thermal flux radiates outward from detector
+    \item Adjoint fast flux radiates outward from moderator region
+  \end{itemize}
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Contributon Current ($\vec{J}_{contrib}$)}
+%  \begin{equation}
+%    \vec{J}_{contrib}\left(\vec{r},E\right)
+%  \end{equation}
+%  \begin{columns}
+%    \column{0.5\textwidth}
+%    \begin{figure}
+%      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/current_con_g02.png}
+%    \end{figure}
+%    \column{0.5\textwidth}
+%    \begin{figure}
+%      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/current_con_g26.png}
+%    \end{figure}
+%  \end{columns}
+%  \begin{itemize}
+%    \item Contributon current
+%  \end{itemize}
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbation in Response ($\delta R$)}
+  \vskip-0.25in
+  \begin{equation}
+    \delta R\left(\vec{r}\right) = \int\phi^+\left(\delta\sigma_t\phi - \int\delta\sigma_s\phi dE^\prime\right)dE
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
+    \end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbation in Response ($\delta R$)}
+  \vskip-0.25in
+  \begin{equation}
+    \delta R\left(\vec{r}\right) = \iint\psi^+\left(\delta\sigma_t\psi - \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime\right)d\hat{\Omega}dE
+  \end{equation}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
+    \end{figure}
+  \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
