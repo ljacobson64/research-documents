@@ -483,22 +483,26 @@
 %\end{frame}
 
 \begin{frame}
-  \frametitle{Perturbation in Response ($\delta R$)}
-  \vskip-0.25in
-  \begin{equation}
-    \delta R\left(\vec{r}\right) = \int\phi^+\left(\delta\sigma_t\phi - \int\delta\sigma_s\phi dE^\prime\right)dE
-  \end{equation}
-  \vskip-0.25in
-  \begin{columns}
-    \column{0.5\textwidth}
-    \begin{figure}
-      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
-    \end{figure}
-    \column{0.5\textwidth}
-    \begin{figure}
-      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
-    \end{figure}
-  \end{columns}
+  \frametitle{Calculation of $\delta R$ in Test Problem}
+  \vskip-0.1in
+  \begin{equation*}
+    \delta R = \left<\psi^+,-\delta H\psi\right>
+  \end{equation*}
+  \vskip-0.1in
+  \begin{itemize}
+    \item $\delta R$ was originally a scalar value which represented the
+          perturbation in the detector response given a perturbation in the
+          cross sections at some location.
+    \item The definition of $\delta R$ was expanded to refer to the
+          perturbation in the detector response given a perturbation in the
+          cross sections at \textbf{all} locations individually.
+    \item The definition of the perturbation in this test problem was replacing
+          whatever material existed in each mesh element with a different
+          material. This was repeated for many different materials to see the
+          effect of changing to different materials in all mesh elements.
+    \item Red values represent positive values of $\delta R$; blue values
+          represent negative values.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -511,13 +515,120 @@
   \begin{columns}
     \column{0.5\textwidth}
     \begin{figure}
-      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_00.png}
     \end{figure}
     \column{0.5\textwidth}
     \begin{figure}
-      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_scalar_00.png}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_02.png}
     \end{figure}
   \end{columns}
+  \begin{itemize}
+    \item Effect of replacing each mesh element with void (left) and beryllium
+          (right)
+    \item Anywhere the plot is red, the perturbation results in an increase in
+          the response; anywhere the plot is blue, the opposite is true.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbation in Response ($\delta R$)}
+  \vskip-0.25in
+  \begin{equation*}
+    \delta R\left(\vec{r}\right) = \iint\psi^+\left(\delta\sigma_t\psi - \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime\right)d\hat{\Omega}dE
+  \end{equation*}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_04.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_05.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Effect of replacing each mesh element with graphite (left) and iron
+          (right)
+    \item $\delta R$ is zero and the plot is white when the perturbation
+          replaces a material with itself
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbation in Response ($\delta R$)}
+  \vskip-0.25in
+  \begin{equation*}
+    \delta R\left(\vec{r}\right) = \iint\psi^+\left(\delta\sigma_t\psi - \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime\right)d\hat{\Omega}dE
+  \end{equation*}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_06.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_07.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Effect of replacing each mesh element with HDPE plastic (left) and
+          heavy water (right)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perturbation in Response ($\delta R$)}
+  \vskip-0.25in
+  \begin{equation*}
+    \delta R\left(\vec{r}\right) = \iint\psi^+\left(\delta\sigma_t\psi - \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime\right)d\hat{\Omega}dE
+  \end{equation*}
+  \vskip-0.25in
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_08.png}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \includegraphics[trim={0.7in 0.15in 1.05in 0.4in},clip,scale=0.36]{images/dR_angular_09.png}
+    \end{figure}
+  \end{columns}
+  \begin{itemize}
+    \item Effect of replacing each mesh element with light water (left) and
+          uranium-235 (right)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Room for Improvement}
+  \begin{itemize}
+  \item The method gives the incorrect results in certain regions even when
+        using the angular flux. The left-pointing current of both the forward
+        and ajoint angular flux in the right-side void is zero, so the
+        contributon flux in that region is zero, which means that dR in that
+        region is also zero.
+  \item This is clearly an incorrect result, because adding \textbf{any}
+        material in that region should increase the response. This is because
+        any scattering that takes place in that region can only increase the
+        response, and there is no way for any interactions in that region to
+        decrease the response.
+  \item $\delta R$ was originally calculated using the scalar flux, not the
+        angular flux, and this behavior was not seen then. The results were not
+        as good in other locations in the problem, though.
+  \end{itemize}
+\end{frame}
+
+% ==============================================================================
+% Future work section
+% ==============================================================================
+
+\begin{frame}
+  \frametitle{Future Work}
+  \begin{itemize}
+
+  \end{itemize}
 \end{frame}
 
 \end{document}
