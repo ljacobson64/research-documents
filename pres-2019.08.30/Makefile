@@ -1,4 +1,4 @@
-TEXFILE := 2019.09.06
+TEXFILE := 2019.08.30
 
 THEME_FILES := beamercolorthemeWisconsin.sty \
                beamercolorthemeWisconsinWhite.sty \
@@ -16,7 +16,7 @@ all: copy_theme
 
 copy_theme:
 	for f in $(THEME_FILES); do \
-	  ln -snf ../UW-Theme/$$f .; \
+	  ln -snf ../UW-beamer-theme/$$f .; \
 	done
 
 clean:
