@@ -1,10 +1,13 @@
-TEXFILE := prelim
+PDFLATEX := pdflatex -halt-on-error
+BIBTEX   := bibtex
+
+TEXFILE  := prelim
 
 all:
-	pdflatex $(TEXFILE)
-	bibtex   $(TEXFILE)
-	pdflatex $(TEXFILE)
-	pdflatex $(TEXFILE)
+	$(PDFLATEX) $(TEXFILE)
+	$(BIBTEX)   $(TEXFILE)
+	$(PDFLATEX) $(TEXFILE)
+	$(PDFLATEX) $(TEXFILE)
 	make clean
 
 clean:
