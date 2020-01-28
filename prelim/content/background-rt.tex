@@ -1,58 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Radiation Transport}
 \label{sec:bg:rt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Radiation transport is good content.
+Placeholder
 
+%===============================================================================
 \subsection{Transport Equation}
+\label{sec:bg:rt:te}
+%===============================================================================
 
-\begin{multline}\label{bg:eq:transport}
+In transport calculations, neutrons have four distinguishing characteristics: position ($\vec{r}$), direction ($\hat{\Omega}$), energy ($E$), and time ($t$).
+There are three components of position, two components of direction, and one component of energy and time, for a total of seven components.
+Any neutrons that have the same values of these seven components are indistinguishable.
+
+These seven components form a seven-dimensional phase space.
+The quantity that describes how the neutrons are distributed within this phase space is referred to as the angular flux $\psi\left(\vec{r},\hat{\Omega},E,t\right)$.
+The angular flux defines the number of neutrons that exist at point $\vec{r}$, going in direction ${\hat{\Omega}}$, with energy $E$, at time $t$.
+
+The angular flux can be calculated by solving the transport equation, which is a balance equation that conserves neutrons.
+Each term in the equation represents a net gain or loss of neutrons in all regions of phase space.
+The transport equation is given by
+
+\begin{multline}
+  \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
+  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) - \\
+  \iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime =
+  q\left(\vec{r},\hat{\Omega},E,t\right).
+\end{multline}
+
+The streaming term $\hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right)$
+represents the net removal of neutrons in a region of phase space due to streaming in the $\hat{\Omega}$ direction.
+
+The collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)$
+represents the net removal of neutrons in a region of phase space due to them undergoing collisions.
+The quantity $\sigma_t\left(\vec{r},E\right)$ is the total cross section, which is a measure of the probability that a neutron will undergo any possible interaction.
+
+The scattering term $\iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime$
+represents the net gain of neutrons in a region of phase space due to scattering.
+The quantity $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)$ is the scattering cross section,
+which is a measure of the probability of a neutron scattering from angle $\hat{\Omega}^\prime$ into angle ${\hat{\Omega}}$ and energy $E^\prime$ into energy $E$.
+The term is integrated over $\hat{\Omega}^\prime$ and $E^\prime$ to result in a quantity that includes contributions from all possible starting angles and energies.
+
+The source term $q\left(\vec{r},\hat{\Omega},E,t\right)$
+represents the gain of neutrons in a region of phase space from external sources.
+It is usually a prescribed quantity.
+
+In problems with no time dependence, the time-dependent term can be removed from the transport equation,
+and the angular flux is represented in six-dimensional phase space as $\psi\left(\vec{r},\hat{\Omega},E\right)$.
+The time-independent transport equation is given by
+
+\begin{multline}\label{eq:bg:transport}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
   \iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
-  q\left(\vec{r},\hat{\Omega},E\right)
+  q\left(\vec{r},\hat{\Omega},E\right).
 \end{multline}
 
-The transport equation is defined by Equation \ref{bg:eq:transport}.
+% TO REFERENCE: \ref{eq:bg:transport}
 
+The transport equation is sometimes written in operator notation, where the streaming, collision, and scattering terms are all combined into a single term $H$.
+The transport equation is written in operator notation simply as
+
+\begin{equation}
+  H\psi = q.
+\end{equation}
+
+There are two main classes of methods for solving the transport equation: deterministic methods and Monte Carlo methods.
+These methods will be explored in Sections \ref{sec:bg:rt:determ} and \ref{sec:bg:rt:determ}.
+
+%===============================================================================
+\subsection{Adjoint Transport Equation}
+\label{sec:bg:rt:determ}
+%===============================================================================
+
+Placeholder
+
+%===============================================================================
+\subsection{Deterministic Radiation Transport}
+\label{sec:bg:rt:determ}
+%===============================================================================
+
+Placeholder
+
+%===============================================================================
 \subsection{Monte Carlo Radiation Transport}
-\label{sec:bg:mc}
+\label{sec:bg:rt:mc}
+%===============================================================================
+
+Placeholder
 
 Reference to \ac{mcnp} \cite{mcnp5-theory}.
 
-As described in Section \ref{sec:bg:rt}, radiation transport is good content.
-But Monte Carlo radiation transport is even better content.
+%===============================================================================
+\subsection{Variance Reduction and Hybrid Methods}
+\label{sec:bg:rt:vr}
+%===============================================================================
 
-Figure \ref{fig:bg:flux} shows an example figure.
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=1.0\textwidth]{content/scalar_flux_fwd_total.png}
-  \caption[Short figure caption]{Long figure caption}
-  \label{fig:bg:flux}
-\end{figure}
-
-Table \ref{tab:bg:mats} shows an example table.
-
-\begin{table}[h]
-  \centering
-  \caption[Short table caption]{Long table caption}
-  \label{tab:bg:mats}
-  \begin{tabular}{| c | c | c |}
-    \hline
-    \textbf{Material ID} & \textbf{Material} \\ \hline
-     0 & Void                 \\ \hline
-     1 & Air                  \\ \hline
-     2 & Aluminum             \\ \hline
-     3 & Beryllium            \\ \hline
-     4 & Beryllium oxide      \\ \hline
-     5 & Boron                \\ \hline
-     6 & Graphite             \\ \hline
-     7 & Copper               \\ \hline
-     8 & Iron                 \\ \hline
-     9 & Borated polyethylene \\ \hline
-    10 & Polyethylene         \\ \hline
-    11 & Heavy water          \\ \hline
-    12 & Light water          \\ \hline
-    13 & Uranium-235          \\ \hline
-  \end{tabular}
-\end{table}
+Placeholder
