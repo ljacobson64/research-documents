@@ -22,7 +22,7 @@ The angular flux can be calculated by solving the transport equation, which is a
 Each term in the equation represents a net gain or loss of neutrons in all regions of phase space.
 The transport equation is given by
 
-\begin{multline}
+\begin{multline}\label{eq:bg:rt:transport-timedep}
   \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) - \\
@@ -51,45 +51,85 @@ In problems with no time dependence, the time-dependent term can be removed from
 and the angular flux is represented in six-dimensional phase space as $\psi\left(\vec{r},\hat{\Omega},E\right)$.
 The time-independent transport equation is given by
 
-\begin{multline}\label{eq:bg:transport}
+\begin{multline}\label{eq:bg:rt:transport}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
   \iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
   q\left(\vec{r},\hat{\Omega},E\right).
 \end{multline}
 
-% TO REFERENCE: \ref{eq:bg:transport}
+% TO REFERENCE: \ref{eq:bg:rt:transport}
 
-The transport equation is sometimes written in operator notation, where the streaming, collision, and scattering terms are all combined into a single term $H$.
+The transport equation is sometimes written in operator notation, where the streaming, collision, and scattering terms are all combined into a single term known as the transport operator $H$.
 The transport equation is written in operator notation simply as
 
-\begin{equation}
+\begin{equation}\label{eq:bg:rt:transport-operator}
   H\psi = q.
 \end{equation}
 
 There are two main classes of methods for solving the transport equation: deterministic methods and Monte Carlo methods.
-These methods will be explored in Sections \ref{sec:bg:rt:determ} and \ref{sec:bg:rt:determ}.
+These methods will be explored in Sections \ref{sec:bg:rt:determ} and \ref{sec:bg:rt:mc}.
 
 %===============================================================================
 \subsection{Adjoint Transport Equation}
-\label{sec:bg:rt:determ}
+\label{sec:bg:rt:adjoint}
 %===============================================================================
 
-Placeholder
+In radiation transport, it is often useful to consider the concept of the ''adjoint'' flux.
+Consider a standard problem with a source and a detector.
+In the forward system, particles stream outward from the source and a response is calculated at the detector.
+In the adjoint system, particles instead stream outward from the detector and a response is calculated at the source.
+The forward detector is thus the same thing as the "adjoint source," and the forward source is thus the same thing as the "adjoint detector."
+
+The reason the adjoint flux is useful is that if the adjoint source is defined to be some quantity of interest in the forward system, then the adjoint flux in a region of phase space can be through of as the importance of that region of phase space to the quantity of interest.
+In other words, if a forward source is placed at some location, the adjoint flux at that location will indicate how much that source will contribute to the detector response.
+
+The adjoint transport equation in operator notation is given by
+
+\begin{equation}\label{eq:bg:rt:adjoint-transport-operator}
+  H^+\psi^+ = q^+
+\end{equation}
+
+where $H^+$ is the adjoint transport operator, $\psi^+$ is the adjoint flux, and $q^+$ is the adjoint source.
+$H^+$ is defined in such a way that $H$ and $H^+$ are adjoint to each other, and this property means the adjoint identity
+
+\begin{equation}\label{eq:bg:rt:adjoint-identity}
+  \left<\psi,q^+\right> =
+  \left<\psi^+,q\right>,
+\end{equation}
+
+where $\left<\right>$ represents integration over all independent variables, holds.
+
+After expanding the adjoint transport operator, the adjoint transport equation is given by 
+
+\begin{multline}\label{eq:bg:rt:adjoint-transport}
+  -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
+  \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) - \\
+  \iint\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
+  q^+\left(\vec{r},\hat{\Omega},E\right).
+\end{multline}
+
+If the adjoint source is defined to be the same as the forward detector, then the detector response $R$ can be calculated as
+
+\begin{equation}\label{eq:bg:rt:detector-response}
+  R =
+  \left<\psi,q^+\right> =
+  \left<\psi^+,q\right>.
+\end{equation}
 
 %===============================================================================
 \subsection{Deterministic Radiation Transport}
 \label{sec:bg:rt:determ}
 %===============================================================================
 
-Placeholder
+Denovo
 
 %===============================================================================
 \subsection{Monte Carlo Radiation Transport}
 \label{sec:bg:rt:mc}
 %===============================================================================
 
-Placeholder
+MCNP
 
 Reference to \ac{mcnp} \cite{mcnp5-theory}.
 
@@ -98,4 +138,4 @@ Reference to \ac{mcnp} \cite{mcnp5-theory}.
 \label{sec:bg:rt:vr}
 %===============================================================================
 
-Placeholder
+ADVANTG
