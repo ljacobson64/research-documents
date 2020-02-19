@@ -26,7 +26,7 @@ The transport equation is given by
   \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) - \\
-  \iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime =
+  \int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime =
   q\left(\vec{r},\hat{\Omega},E,t\right).
 \end{multline}
 
@@ -37,7 +37,7 @@ The collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega}
 represents the net removal of neutrons in a region of phase space due to them undergoing collisions.
 The quantity $\sigma_t\left(\vec{r},E\right)$ is the total cross section, which is a measure of the probability that a neutron will undergo any possible interaction.
 
-The scattering term $\iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime$
+The scattering term $\int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime$
 represents the net gain of neutrons in a region of phase space due to scattering.
 The quantity $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)$ is the scattering cross section,
 which is a measure of the probability of a neutron scattering from angle $\hat{\Omega}^\prime$ into angle ${\hat{\Omega}}$ and energy $E^\prime$ into energy $E$.
@@ -54,7 +54,7 @@ The time-independent transport equation is given by
 \begin{multline}\label{eq:bg:rt:transport}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
-  \iint\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
+  \int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
   q\left(\vec{r},\hat{\Omega},E\right).
 \end{multline}
 
@@ -100,42 +100,55 @@ $H^+$ is defined in such a way that $H$ and $H^+$ are adjoint to each other, and
 
 where $\left<\right>$ represents integration over all independent variables, holds.
 
-After expanding the adjoint transport operator, the adjoint transport equation is given by 
+After expanding the adjoint transport operator, the adjoint transport equation is given by
 
 \begin{multline}\label{eq:bg:rt:adjoint-transport}
   -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) - \\
-  \iint\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
+  \int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
   q^+\left(\vec{r},\hat{\Omega},E\right).
 \end{multline}
 
 If the adjoint source is defined to be the same as the forward detector, then the detector response $R$ can be calculated as
 
 \begin{equation}\label{eq:bg:rt:detector-response}
-  R =
-  \left<\psi,q^+\right> =
-  \left<\psi^+,q\right>.
+  R = \left<\psi,q^+\right>
+    = \left<\psi^+,q\right>.
 \end{equation}
 
 %===============================================================================
-\subsection{Deterministic Radiation Transport}
+\subsection{Deterministic Methods}
 \label{sec:bg:rt:determ}
 %===============================================================================
 
-Denovo
+There are two main classes of methods for solving the transport equation: deterministic methods and Monte Carlo methods.
+Deterministic methods solve the transport equation directly and produce detailed solutions throughout the entire phase space.
+However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainities in the results.
+Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
+Hence, it requires a significant degree of expertise and insight to mitigate these undesirable characteristics and produce useful results.
+
+The main advantage of deterministic methods when compared to Monte Carlo methods is that they are significantly less compuationally expensive.
+
+Denovo \cite{denovo} is a powerful parallel 3D deterministic code developed at Oak Ridge National Laboratory.
+It uses the discrete ordinates (S\textsubscript{N}), multigroup energy, and anisotropic P\textsubscript{n} approximations.
+It can solve both the forward and adjoint transport equations.
+It has several spatial discretization algorithms and angle quadrature sets.
 
 %===============================================================================
-\subsection{Monte Carlo Radiation Transport}
+\subsection{Monte Carlo Methods}
 \label{sec:bg:rt:mc}
 %===============================================================================
 
-MCNP
+The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
+It has none of the drawbacks of deterministic methods in that it allows for detailed geometry representations and and continuous energy and angle space.
+However, it is significantly more compuationally expensive because many particles may need to be simulated in order for the results to achieve convergence.
 
-Reference to \ac{mcnp} \cite{mcnp5-theory}.
+The Monte Carlo N-Particle (MCNP) transport code \cite{mcnp620} is a powerful and widely-used parallel Monte Carlo code developed at Los Alamos National Laboratory.
+It is used for many applications, including "radiation protection and dosimetry, radiation shielding, radiography, medical physics, nuclear criticality safety, detector design and analysis, nuclear oil well logging, accelerator target design, fission and fusion reactor design, decontamination, and decommissioning" (quote from MCNP's website.)
 
 %===============================================================================
 \subsection{Variance Reduction and Hybrid Methods}
 \label{sec:bg:rt:vr}
 %===============================================================================
 
-ADVANTG
+\cite{advantg}
