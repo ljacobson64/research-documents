@@ -67,8 +67,8 @@ The transport equation is written in operator notation simply as
   H\psi = q.
 \end{equation}
 
-There are two main classes of methods for solving the transport equation: deterministic methods and Monte Carlo methods.
-These methods will be explored in Sections \ref{sec:bg:rt:determ} and \ref{sec:bg:rt:mc}.
+There are two main classes of methods for solving the transport equation: Monte Carlo methods and deterministic methods.
+These methods will be explored in Sections \ref{sec:bg:rt:mc} and \ref{sec:bg:rt:determ}.
 
 %===============================================================================
 \subsection{Adjoint Transport Equation}
@@ -116,12 +116,31 @@ If the adjoint source is defined to be the same as the forward detector, then th
     = \left<\psi^+,q\right>.
 \end{equation}
 
+% Current, contributon flux, etc.
+
+%===============================================================================
+\subsection{Monte Carlo Methods}
+\label{sec:bg:rt:mc}
+%===============================================================================
+
+There are two main classes of methods for solving the transport equation: Monte Carlo methods and deterministic methods.
+The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
+It allows for detailed representations of geometry and continuous energy and angle space.
+However, it is quite compuationally expensive because many particles may need to be simulated in order to achieve reliable results.
+
+%-------------------------------------------------------------------------------
+\subsubsection{MCNP}
+\label{sec:bg:rt:mc:MCNP}
+%-------------------------------------------------------------------------------
+
+The \ac{mcnp} transport code \cite{mcnp620} is a powerful and widely-used parallel Monte Carlo code developed at Los Alamos National Laboratory.
+It is used for many applications, including "radiation protection and dosimetry, radiation shielding, radiography, medical physics, nuclear criticality safety, detector design and analysis, nuclear oil well logging, accelerator target design, fission and fusion reactor design, decontamination, and decommissioning" (quote from MCNP's website.)
+
 %===============================================================================
 \subsection{Deterministic Methods}
 \label{sec:bg:rt:determ}
 %===============================================================================
 
-There are two main classes of methods for solving the transport equation: deterministic methods and Monte Carlo methods.
 Deterministic methods solve the transport equation directly and produce detailed solutions throughout the entire phase space.
 However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainities in the results.
 Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
@@ -134,21 +153,31 @@ It uses the discrete ordinates (S\textsubscript{N}), multigroup energy, and anis
 It can solve both the forward and adjoint transport equations.
 It has several spatial discretization algorithms and angle quadrature sets.
 
-%===============================================================================
-\subsection{Monte Carlo Methods}
-\label{sec:bg:rt:mc}
-%===============================================================================
+%-------------------------------------------------------------------------------
+\subsubsection{ADVANTG}
+\label{sec:bg:rt:determ:advantg}
+%-------------------------------------------------------------------------------
 
-The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
-It has none of the drawbacks of deterministic methods in that it allows for detailed geometry representations and and continuous energy and angle space.
-However, it is significantly more compuationally expensive because many particles may need to be simulated in order for the results to achieve convergence.
+The easiest way to run Denovo calculations is with the \ac{advantg} \cite{advantg}, which is also developed at Oak Ridge National Laboratory.
+The main purpose of ADVANTG is to generate variance reduction parameters for use in Monte Carlo simulations, but it can also be used to run Denovo without calculating variance reduction parameters.
+Here are the main steps involved when using ADVANTG to drive a deterministic calculation:
 
-The Monte Carlo N-Particle (MCNP) transport code \cite{mcnp620} is a powerful and widely-used parallel Monte Carlo code developed at Los Alamos National Laboratory.
-It is used for many applications, including "radiation protection and dosimetry, radiation shielding, radiography, medical physics, nuclear criticality safety, detector design and analysis, nuclear oil well logging, accelerator target design, fission and fusion reactor design, decontamination, and decommissioning" (quote from MCNP's website.)
+\begin{itemize}
+  \item Extract the geometry, materials, sources, and tallies from the MCNP model
+  \item Discretize the geometry, sources, and tallies to conform to a user-supplied spatial grid and multigroup cross section library
+  \item Mix the materials togetherso that each mesh element contains just one material
+  \item Execute Denovo (forward, adjoint, or both)
+  \item Write output to file
+\end{itemize}
+
+The main outputs of ADVANTG when it it is used to drive deterministic calculations are Silo files \cite{silo}.
+These files contain the spatial grid, the mixed materials, sources, and tallies mapped onto the grid, thte scalar forward and adjoint fluxes, and the contributon flux.
+The data contained in the Silo files can be visualized easily with the VisIT software \cite{visit}.
+
+There are no documented user options which allow users to access the forward or adjoint angular flux data.
+However, ADVANTG contains an undocumented feature which allows for the full angular data to be written to an HDF5 file \cite{hdf5}.
 
 %===============================================================================
 \subsection{Variance Reduction and Hybrid Methods}
 \label{sec:bg:rt:vr}
 %===============================================================================
-
-\cite{advantg}
