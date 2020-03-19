@@ -3,7 +3,10 @@
 \label{sec:bg:rt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Placeholder
+The most fundamental equation in radiation transport is the transport equation, also known as the Boltzmann equation.
+The transport equation can be used to solve for the particle flux, which is a measure of how many particles are passing through an area per unit time.
+Calculating the flux at some location is almost always necessary when performing radiation transport calculations.
+This section describes the transport equation, the adjoint transport equation, two classes of methods used to solve the equation (the Monte Carlo method and deterministic methods), and hybrid Monte Carlo/deterministic methods.
 
 %===============================================================================
 \subsection{Transport Equation}
@@ -35,12 +38,12 @@ represents the net removal of neutrons in a region of phase space due to streami
 
 The collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)$
 represents the net removal of neutrons in a region of phase space due to them undergoing collisions.
-The quantity $\sigma_t\left(\vec{r},E\right)$ is the total cross section, which is a measure of the probability that a neutron will undergo any possible interaction.
+The quantity $\sigma_t\left(\vec{r},E\right)$ is the total cross section, which is a measure of the probability that a particle will undergo any possible interaction.
 
 The scattering term $\int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime$
 represents the net gain of neutrons in a region of phase space due to scattering.
 The quantity $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)$ is the scattering cross section,
-which is a measure of the probability of a neutron scattering from angle $\hat{\Omega}^\prime$ into angle ${\hat{\Omega}}$ and energy $E^\prime$ into energy $E$.
+which is a measure of the probability of a particle scattering from angle $\hat{\Omega}^\prime$ into angle ${\hat{\Omega}}$ and energy $E^\prime$ into energy $E$.
 The term is integrated over $\hat{\Omega}^\prime$ and $E^\prime$ to result in a quantity that includes contributions from all possible starting angles and energies.
 
 The source term $q\left(\vec{r},\hat{\Omega},E,t\right)$
@@ -67,7 +70,7 @@ The transport equation is written in operator notation simply as
   H\psi = q.
 \end{equation}
 
-There are two main classes of methods for solving the transport equation: Monte Carlo methods and deterministic methods.
+There are two main classes of methods for solving the transport equation: the Monte Carlo method and deterministic methods.
 These methods will be explored in Sections \ref{sec:bg:rt:mc} and \ref{sec:bg:rt:determ}.
 
 %===============================================================================
@@ -123,18 +126,23 @@ If the adjoint source is defined to be the same as the forward detector, then th
 \label{sec:bg:rt:mc}
 %===============================================================================
 
-There are two main classes of methods for solving the transport equation: Monte Carlo methods and deterministic methods.
 The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
 It allows for detailed representations of geometry and continuous energy and angle space.
 However, it is quite compuationally expensive because many particles may need to be simulated in order to achieve reliable results.
+Thus, it can take a long time (up to computer years in the most complicated systems) in order to obtain results.
+These computing requirements are usually managed by utilizing the resources of a computer cluster.
 
 %-------------------------------------------------------------------------------
 \subsubsection{MCNP}
-\label{sec:bg:rt:mc:MCNP}
+\label{sec:bg:rt:mc:mcnp}
 %-------------------------------------------------------------------------------
 
 The \ac{mcnp} transport code \cite{mcnp620} is a powerful and widely-used parallel Monte Carlo code developed at Los Alamos National Laboratory.
-It is used for many applications, including "radiation protection and dosimetry, radiation shielding, radiography, medical physics, nuclear criticality safety, detector design and analysis, nuclear oil well logging, accelerator target design, fission and fusion reactor design, decontamination, and decommissioning" (quote from MCNP's website.)
+
+MCNP allows for arbitrary geometry representations using a text-based \ac{csg} language.
+It operates in continuous energy space and is designed to track particles over a wide range of energies.
+It can track many different types of neutral and charged particles, with neutrons, photons, electrons, and protons being the most common.
+It is used for nuclear analysis and design in a wide range of applications, including radiation protection, shielding, radiography, medical physics, criticality safety, detectors, accelerators, fission reactors, and fusion reactors.
 
 %===============================================================================
 \subsection{Deterministic Methods}
@@ -142,11 +150,12 @@ It is used for many applications, including "radiation protection and dosimetry,
 %===============================================================================
 
 Deterministic methods solve the transport equation directly and produce detailed solutions throughout the entire phase space.
-However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainities in the results.
+However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainties in the results.
 Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
-Hence, it requires a significant degree of expertise and insight to mitigate these undesirable characteristics and produce useful results.
+% Hence, it requires a significant degree of expertise and insight to mitigate these undesirable characteristics and produce useful results.
+For these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
 
-The main advantage of deterministic methods when compared to Monte Carlo methods is that they are significantly less compuationally expensive.
+The main advantage of deterministic methods when compared to the Monte Carlo method is that they are significantly less computationally expensive.
 
 Denovo \cite{denovo} is a powerful parallel 3D deterministic code developed at Oak Ridge National Laboratory.
 It uses the discrete ordinates (S\textsubscript{N}), multigroup energy, and anisotropic P\textsubscript{n} approximations.
@@ -159,7 +168,7 @@ It has several spatial discretization algorithms and angle quadrature sets.
 %-------------------------------------------------------------------------------
 
 The easiest way to run Denovo calculations is with the \ac{advantg} \cite{advantg}, which is also developed at Oak Ridge National Laboratory.
-The main purpose of ADVANTG is to generate variance reduction parameters for use in Monte Carlo simulations, but it can also be used to run Denovo without calculating variance reduction parameters.
+The main purpose of ADVANTG is to generate variance reduction parameters for use in MCNP simulations, but it can also be used to run Denovo without calculating variance reduction parameters.
 Here are the main steps involved when using ADVANTG to drive a deterministic calculation:
 
 \begin{itemize}
