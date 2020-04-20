@@ -13,7 +13,7 @@ THEME_FILES := beamercolorthemeWisconsin.sty \
 all: copy_theme
 	pdflatex -halt-on-error $(TEXFILE).tex
 	pdflatex -halt-on-error $(TEXFILE).tex
-	make clean
+	#make clean
 
 copy_theme:
 	for f in $(THEME_FILES); do \
@@ -22,7 +22,7 @@ copy_theme:
 
 clean:
 	rm -f $(THEME_FILES) $(TEXFILE).aux $(TEXFILE).log $(TEXFILE).nav \
-	      $(TEXFILE).out $(TEXFILE).snm $(TEXFILE).toc
+	      $(TEXFILE).out $(TEXFILE).snm $(TEXFILE).toc $(TEXFILE).vrb
 
 realclean: clean
 	rm -f $(TEXFILE).pdf
