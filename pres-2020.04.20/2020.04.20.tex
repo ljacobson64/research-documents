@@ -27,6 +27,8 @@
   \begin{itemize}
     \item Robust, usable software for optimization and uncertainty
           quantification (UQ)
+    \item Production tool for engineering design and analysis
+    \item Research tool for the development of new algorithms
     \item Mainly developed at Sandia National Laboratory
     \item Released as open source under the GNU Lesser General Public License
     \item Website: https://dakota.sandia.gov
@@ -41,7 +43,7 @@
     \item Started in 1994 as an internal R\&D activity at Sandia to provide a
           common set of optimization tools for structural analysis problems
     \item Prior to Dakota, there was no effort to archive optimization methods
-          for resuse on other projects
+          for reuse on other projects
     \item Thus, engineers had to build new custom interfaces between engineering
           analysis software and optimization software for each new application
     \item Initial Dakota toolkit provided access to a variety of optimization
@@ -72,7 +74,7 @@
   \end{enumerate}
   \vskip 0.5in
   \begin{itemize}
-    \item These capabilities are described in the succeeding 5 slides
+    \item These capabilities are described in the succeeding slides
     \item Note: the information in these slides is taken partially verbatim from
           the \href{https://dakota.sandia.gov/content/manuals}{Dakota Version
           6.10 User's Manual}
@@ -158,5 +160,56 @@
           calibration
   \end{itemize}
 \end{frame}
+
+% ==============================================================================
+
+\begin{frame}
+  \frametitle{Related advanced capabilities}
+  \begin{itemize}
+    \item Surrogate models
+    \begin{itemize}
+      \item Inexpensive approximate models that aim to capture the features of
+            an expensive high-fidelity model
+      \item Include data fits, multifidelity, and reduced-order model surrogates
+      \item Can serve as inexpensive stand-ins for optimization or UQ studies
+    \end{itemize}
+    \item Nested models
+    \begin{itemize}
+      \item Permit layering one Dakota method over another
+      \item Enable methods like mixed epistemic-aleatory or second-order UQ,
+            optimization under uncertainty, or surrogate-based UQ
+    \end{itemize}
+    \item Solution verification and Bayesian calibration/UQ
+    \item Parallel computing
+    \begin{itemize}
+      \item Dakota is designed to exploit parallel computing resources
+    \end{itemize}
+    \item GUI
+    \begin{itemize}
+      \item Intuitively link Dakota study to simulation model
+      \item Graphically plot output data from Dakota study
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% ==============================================================================
+
+\begin{frame}
+  \frametitle{Coupling Dakota to a simulation}
+  \begin{figure}
+    \includegraphics[scale=0.3]{images/blackbox.png}
+  \end{figure}
+  \begin{itemize}
+    \item Single, simple interface between Dakota and user's simulation code
+    \item Easy to try new methods or algorithms; generally only need to change a
+          few lines in the Dakota text input file
+    \item Does not require deep knowledge of underlying Dakota software packages
+    \item ``Black-box'' coupling: Dakota and user's simulation code
+          exchange data by reading and writing short text files
+    \item Closer coupling is possible for advanced users if needed
+  \end{itemize}
+\end{frame}
+
+% ==============================================================================
 
 \end{document}
