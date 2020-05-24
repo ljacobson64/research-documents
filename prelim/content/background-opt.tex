@@ -1,13 +1,49 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Shape Optimization}
+\section{Optimization Methods}
 \label{sec:bg:opt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Placeholder
+The goal of optimization algorithms is to minimize an objective function subject to some constraints on design variables and responses.
+The mathematical formulation of a general optimization problem is as follows:
 
-%===============================================================================
-\subsection{Conjugate Gradient Method}
-\label{sec:bg:opt:conjgrad}
-%===============================================================================
+\begin{equation}\begin{split}
+  \mbox{minimize:}  \quad & f\left(\textbf{x}\right) \\
+                          & \textbf{x} \in \mathbb{R}^n \\
+  \mbox{subject to:}\quad & \textbf{g}_L \leq \textbf{g}\left(\textbf{x}\right) \leq \textbf{g}_U \\
+                          & \textbf{h}\left(\textbf{x}\right) = \textbf{h}_t \\
+                          & \textbf{a}_L \leq \textbf{A}_i\textbf{x} \leq \textbf{a}_U \\
+                          & \textbf{A}_e\textbf{x} = \textbf{a}_t \\
+                          & \textbf{x}_L \leq \textbf{x} \leq \textbf{x}_U
+\end{split}\end{equation}
 
-Placeholder
+where vector and matrix terms are shown in bold.
+
+In this formulation, $\textbf{x}$ is an n-dimensional real-valued vector of \textit{design variables} or \textit{design parameters}.
+The design variables are the variables that the optimization algorithm is allowed to change during its process of searching for the optimal solution.
+Constraints may be placed on $\textbf{x}$ in the form of lower bounds $\textbf{x}_L$ and upper bounds $\textbf{x}_R$.
+These constraints define the allowable values of $\textbf{x}$.
+The set of all allowable values of $\textbf{x}$ is known as the \textit{design space} or the \textit{parameter space}.
+Any particular set of values within the parameter space is known as a \textit{design point} or a \textit{sample point}.
+
+The goal of the optimization algorithm is to minimize the \textit{objective function} $f\left(\textbf{x}\right)$ while satisfying the constraints.
+
+Constraints can be categorized as either linear constraints or nonlinear constraints.
+Linear constraints depend only on linear combinations of the elements of $\textbf{x}$.
+For example, $x_1 + x_2 < 5$ and $3x_1 - \frac{1}{2}x_2 = 6$ would be linear constraints.
+Nonlinear constraints depend on nonlinear combinations of the elements of $\textbf{x}$.
+For example, $x_1 * x_2 > 10$ and $2x_1 + \frac{x_2}{x_3} = -5.5$ would be nonlinear constraints.
+
+Constraints can also be categorized as either equality constraints or inequality constraints.
+Equality constraints indicate that some function of the design variables must be equal to a number.
+For example, $2x_1 + \frac{x_2}{x_3} = -5.5$ and $3x_1 - \frac{1}{2}x_2 = 6$ would be equality constraints.
+Inequality constraints indicate that some function of the design variables must be less than or greater than a number.
+For example, $x_1 + x_2 < 5$ and $x_1 * x_2 > 10$ would be inequality constraints.
+Inequality constraints are said to be "two-sided" because they contain both lower and upper bounds.
+
+The \textit{linear equality constraints} create a linear system $\textbf{A}_e\textbf{x}$, where ${\textbf{A}_e}$ is the coefficient matrix for the linear system, and which has target values specified by ${\textbf{a}_t}$.
+The \textit{nonlinear equality constraints} ${\textbf{h}\left(\textbf{x}\right)}$ have target values specified by $\textbf{h}_t$.
+The \textit{linear inequality constraints} create a linear system $\textbf{A}_i\textbf{x}$, where ${\textbf{A}_i}$ is the coefficient matrix for the linear system, and which has lower bounds $\textbf{a}_L$ and upper bounds $\textbf{a}_U$.
+The \textit{nonlinear inequality constraints} $\textbf{g}\left(\textbf{x}\right)$ have lower bounds $\textbf{g}_L$ and upper bounds $\textbf{g}_R$.
+
+A design point is called \textit{feasible} if it satisfies all of the constraints, and it is called \textit{infeasible} if it violates any of the constraints.
+The \textit{infeasibility} of a design point is a measure of how close the design point is to being feasible.
