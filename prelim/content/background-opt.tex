@@ -1,9 +1,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Optimization Methods}
+\section{Optimization}
 \label{sec:bg:opt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The goal of optimization algorithms is to minimize an objective function subject to some constraints on design variables and responses.
+The field of optimization is well-studied, and there is a large body of literature that describes the mathematical formulation of optimization problems and the fundamental characteristics of optimization algorithms.
+Since this document does not involve researching new optimization algorithms, the original references are not presented here.
+Instead, the information in this section is paraphrased from the Dakota User's Manual \cite{dakota}.
+
+Dakota is a toolkit devoloped by Sandia National Laboratories that provides an interface between simulation codes and iterative analysis methods.
+The optimization capabilities of Dakota are used in this work.
+
+%===============================================================================
+\subsection{Mathematical Formulation}
+\label{sec:bg:opt:math}
+%===============================================================================
+
+Words in \textit{italics} are technical terms that are used used to describe various properties of optimization problems and solution methods.
+
 The mathematical formulation of a general optimization problem is as follows:
 
 \begin{equation}\begin{split}
@@ -47,3 +61,45 @@ The \textit{nonlinear inequality constraints} $\textbf{g}\left(\textbf{x}\right)
 
 A design point is called \textit{feasible} if it satisfies all of the constraints, and it is called \textit{infeasible} if it violates any of the constraints.
 The \textit{infeasibility} of a design point is a measure of how close the design point is to being feasible.
+
+%===============================================================================
+\subsection{Categories of Optimization Algorithms}
+\label{sec:bg:opt:algs}
+%===============================================================================
+
+Numerous methods exist to solve optimization problems, but all of them can be said to iterate on $\textbf{x}$.
+This means that (1) initial values for the elements of $\textbf{x}$ are chosen, (2) the \textit{response quantities} $f\left(\textbf{x}\right)$, $g\left(\textbf{x}\right)$, and $h\left(\textbf{x}\right)$ are computed, and (3) some algorithm is used to generate new elements of $\textbf{x}$ to use for the next simulation.
+The new elements of $\textbf{x}$ are chosen to reduce the response function, to reduce the amount of infeasibility, or both.
+Optimization algorithms can be categorized by three criteria: optimization problem type, search goal, and search method.
+
+The \textit{optimization problem type} is determined by the types of constraints in the problem as well as whether the objective and constraint functions are linear or nonlinear.
+Problems can be categorized by the types of constraints present.
+A problem that has no constraints is called an \textit{unconstrained problem}.
+A problem that only has lower and upper bounds on the design variables is called a \textit{bound-constrained problem}.
+A problem that has both bound and linear constraints is called a \textit{linearly-constrained problem}.
+A problem that has any nonlinear constraints is called a \textit{nonlinearly-constrained problem}.
+A problem that only has equality constraints is called an \textit{equality-constrained problem}.
+A problem that only has inequality constraints is called an \textit{inequality-constrained problem}.
+Problems can also be categorized by the linearity or nonlinearity of the objective and constraint functions.
+\textit{Linear programming (LP) problems} are problems where the objective function and all constraint functions are linear.
+\textit{Nonlinear programming (NLP) problems} are problems where at least one of the functions are nonlinear.
+In general, NLP problems are significantly more difficult to solve than LP problems.
+
+The \textit{search goal} is the ultimate objective of the optimization algorithm, which can be either global or local optimization.
+\textit{Global optimization methods} aim to find the design point that results in the minimum feasible objective function over the entire parameter space.
+\textit{Local optimization methods} only aim to find the design point that results in the minimum feasible objective in a region of the parameter space close to the starting point.
+Local optimization methods can be used to find the global minimum for certain classes of problems that do not have strong local minima, but they are not in general designed to find the global minimum.
+Global optimization methods are in general significantly more computationally expensive than local optimization methods, so it is important to select the appropriate algorithm that is most applicable to the problem goals.
+
+The \textit{search method} is the approach taken by the algorithm to select a new design point that results in either a lower value of the objective function or less infeasibility.
+Search methods are categorized as gradient-based methods or nongradient-based methods.
+In \textit{gradient-based} methods, gradients of the response function with respect to the design variables are computed to find the local direction that minimizes the objective function.
+Many local optimization methods are gradient-based methods.
+Gradient-based methods are not always useful, however, as sometimes the gradients are prohibitively expensive to calculate, and sometimes they are inaccurate or even nonexistent.
+When gradient-based methods cannot be used, \textit{nongradient-based methods} that do not attempt to calculate the gradient must be used.
+
+%===============================================================================
+\subsection{Gradient-Based Methods}
+\label{sec:bg:opt:grad}
+%===============================================================================
+
