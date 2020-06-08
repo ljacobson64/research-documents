@@ -99,7 +99,24 @@ Gradient-based methods are not always useful, however, as sometimes the gradient
 When gradient-based methods cannot be used, \textit{nongradient-based methods} that do not attempt to calculate the gradient must be used.
 
 %===============================================================================
-\subsection{Gradient-Based Methods}
+\subsection{Gradient-Based Local Methods}
 \label{sec:bg:opt:grad}
 %===============================================================================
 
+Gradient-based methods are most useful for finding a local minimum near to the initial design point.
+They are the most efficient of all local optimization methods, and they are best suited when the problem is smooth (derivatives are continuous) and unimodal (the objective function only has a single minimum).
+They are not robust if they are applied to problems that are not smooth or are multimodal.
+
+If the application can provide analytic gradients and Hessians (second-order partial derivatives), then the convergence rate will be quadratic near the solution using Newton's Method.
+If the application can provide analytic gradients but not Hessians, then the Hessians are approximated from the gradient data and the convergence rate will only be superlinear near the solution.
+If the application cannot provide analytic gradients, then a finite difference method will be used to estimate the gradients.
+
+For nonlinear problems, gradient-based methods are iterative processes in which a sequence of subproblems are solved until the solution converges for the full problem.
+
+Different methods exist for problems with different types of constraints.
+For unconstrained and bound-constrained problems, conjugate gradient methods are the most appropriate.
+In the conjugate gradient method, the subproblems minimize a quadratic function over a space defined by the gradient and directions that are mutually conjugate with respect to the Hessian.
+For constrained problems, there are several categories of methods which will not be described in detail here: Sequential Quadratic Programming (SQP) methods, Newton methods, Method of Feasible Directions (MFD) methods, and the augmented Lagrangian method.
+
+% Section 6.3.1: Multiobjective Optimization
+% Section 6.4:   Optimization Usage Guidelines
