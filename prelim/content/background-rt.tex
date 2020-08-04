@@ -3,190 +3,146 @@
 \label{sec:bg:rt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The most fundamental equation in radiation transport is the transport equation, also known as the Boltzmann equation.
-The transport equation can be used to solve for the particle flux, which is a measure of how many particles are passing through an area per unit time.
-Calculating the flux at some location is almost always necessary when performing radiation transport calculations.
-This section describes the transport equation, the adjoint transport equation, two classes of methods used to solve the equation (the Monte Carlo method and deterministic methods), and hybrid Monte Carlo/deterministic methods.
+Much of the information in this section is paraphrased from Lewis \& Miller \cite{lewis_miller}.
 
 %===============================================================================
 \subsection{Transport Equation}
 \label{sec:bg:rt:te}
 %===============================================================================
 
-In transport calculations, neutrons have four distinguishing characteristics: position ($\vec{r}$), direction ($\hat{\Omega}$), energy ($E$), and time ($t$).
-There are three components of position, two components of direction, and one component of energy and time, for a total of seven components.
-Any neutrons that have the same values of these seven components are indistinguishable.
+%-------------------------------------------------------------------------------
+\subsubsection{Particle Distributions}
+\label{sec:bg:rt:te:pd}
+%-------------------------------------------------------------------------------
 
-These seven components form a seven-dimensional phase space.
-The quantity that describes how the neutrons are distributed within this phase space is referred to as the angular flux $\psi\left(\vec{r},\hat{\Omega},E,t\right)$.
-The angular flux defines the number of neutrons that exist at point $\vec{r}$, going in direction ${\hat{\Omega}}$, with energy $E$, at time $t$.
+In general, there are seven independent variables that are required to fully describe the distribution of neutrons: three coordinates specifying position ($\vec{r}$), two angles specifying the particle's direction of travel ($\hat{\Omega}$), the particle's energy ($E$), and time ($t$).
 
-The angular flux can be calculated by solving the transport equation, which is a balance equation that conserves neutrons.
-Each term in the equation represents a net gain or loss of neutrons in all regions of phase space.
-The transport equation is given by
+The most fundamental dependent variable in transport theory is the \textit{particle density distribution}.
+The particle density distribution $N\left(\vec{r},\hat{\Omega},E,t\right)dEd\hat{\Omega}dV$ is defined as the number of particles in a volume element $dV$ about $\vec{r}$ traveling in the cone of directions $d\hat{\Omega}$ about $\hat{\Omega}$ with energies between $E$ and $E + dE$ at time $t$.
 
+The particle density distribution is rarely directly considered in transport calculations, however.
+The most common quantity considered is the \textit{angular flux}:
+\begin{equation}\label{eq:bg:rt:angular-flux}
+  \psi\left(\vec{r},\hat{\Omega},E,t\right) \equiv vN\left(\vec{r},\hat{\Omega},E,t\right)
+\end{equation}
+where $v$ is the particle speed.
+
+It is sometimes useful to consider the flux independent of angle.
+In these cases, the \textit{scalar flux} may be considered:
+\begin{equation}\label{eq:bg:rt:scalar-flux}
+  \phi\left(\vec{r},E,t\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)d\hat{\Omega}.
+\end{equation}
+
+The \textit{current vector}, which is a measure of the directionality of particles, is defined as
+\begin{equation}\label{eq:bg:rt:current-vector}
+  \vec{J}\left(\vec{r},E,t\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)\hat{\Omega} d\hat{\Omega}.
+\end{equation}
+
+The \textit{reaction rate} for reactions of type $x$ is
+\begin{equation}\label{eq:bg:rt:rxn-rate-angular}
+  R = \int_V\int_{4\pi}\int_0^\infty\sigma_x\left(\vec{r},\hat{\Omega},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)dEd\hat{\Omega}dV
+\end{equation}
+where $\sigma_x$ is the cross section for reaction $x$.
+Cross sections are almost always independent of the particle direction, so the reaction rate equation can be simplified as
+\begin{equation}\label{eq:bg:rt:rxn-rate-scalar}
+  R = \int_V\int_0^\infty\sigma_x\left(\vec{r},E\right)\phi\left(\vec{r},E,t\right)dEdV.
+\end{equation}
+
+If $\sigma_x$ refers to the total cross section $\sigma_t$, then the reaction rate is referred to as the \textit{collision density}.
+
+%-------------------------------------------------------------------------------
+\subsubsection{Transport Equation with General Source}
+\label{sec:bg:rt:te:te}
+%-------------------------------------------------------------------------------
+
+The transport equation is a balance between all possible mechanisms for the number of particles in $dEd\hat{\Omega}dV$ to change.
+There are three such mechanisms:
+\begin{enumerate}
+  \item net streaming out of $dV$, given by the streaming term $\hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right)$,
+  \item collisions in $dV$ that result in particle absorption or scattering out of $dEdV$, given by the collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)$, and
+  \item emission of particles in $dV$ (includes external sources, scattering, and fission), given by a general source term $q\left(\vec{r},\hat{\Omega},E,t\right)$.
+\end{enumerate}
+
+The time-dependent transport equation is a balance between these three processes, and it is given by
+\begin{equation}\label{eq:bg:rt:transport-totsrc-timedep}
+  \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
+  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) =
+  q\left(\vec{r},\hat{\Omega},E,t\right).
+\end{equation}
+If the dependence on time is neglected, the time-dependent term disappears. The time-independent transport equation is given by
+\begin{equation}\label{eq:bg:rt:transport-totsrc}
+  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) =
+  q\left(\vec{r},\hat{\Omega},E\right).
+\end{equation}
+
+%-------------------------------------------------------------------------------
+\subsubsection{Source Terms}
+\label{sec:bg:rt:te:st}
+%-------------------------------------------------------------------------------
+
+The source term $q\left(\vec{r},\hat{\Omega},E,t\right)$ includes contributions from three sources: external sources, scattering, and fission.
+It can be represented as a sum of these three contributions:
+\begin{equation}\label{eq:bg:rt:source}
+  q = q_{ex} + q_s + q_f.
+\end{equation}
+
+External sources are known distributions of source particles that are entirely independent of the flux.
+External sources are represented as a known distribution $q_{ex}\left(\vec{r},\hat{\Omega},E,t\right)$.
+
+Scattering sources are the result of particles scattering from one angle and energy to another.
+Particles at the original angle and energy are removed from the system while particles at the new angle and energy are born.
+The source due to scattering is given by the scattering term:
+\begin{equation}\label{eq:bg:rt:scattering-term}
+  q_s\left(\vec{r},\hat{\Omega},E,t\right) \equiv
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)dE^\prime d\hat{\Omega}^\prime
+\end{equation}
+where the scattering cross section $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)$ is the cross section for particles to scatter from $\hat{\Omega}^\prime$ into $\hat{\Omega}$ and $E^\prime$ into $E$.
+
+Fission sources only occur if a multiplying medium exists in the system.
+Fission sources will not be considered in this work.
+
+%-------------------------------------------------------------------------------
+\subsubsection{Transport Equation with Explicit Scattering Source}
+\label{sec:bg:rt:te:te2}
+%-------------------------------------------------------------------------------
+
+Separating the total source term in the time-independent transport equation into its external and scattering components yields
 \begin{multline}\label{eq:bg:rt:transport-timedep}
   \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
-  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) - \\
-  \int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime =
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) = \\
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)dE^\prime d\hat{\Omega}^\prime +
   q\left(\vec{r},\hat{\Omega},E,t\right).
 \end{multline}
-
-The streaming term $\hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right)$
-represents the net removal of neutrons in a region of phase space due to streaming in the $\hat{\Omega}$ direction.
-
-The collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)$
-represents the net removal of neutrons in a region of phase space due to them undergoing collisions.
-The quantity $\sigma_t\left(\vec{r},E\right)$ is the total cross section, which is a measure of the probability that a particle will undergo any possible interaction.
-
-The scattering term $\int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)d\hat{\Omega}^\prime dE^\prime$
-represents the net gain of neutrons in a region of phase space due to scattering.
-The quantity $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)$ is the scattering cross section,
-which is a measure of the probability of a particle scattering from angle $\hat{\Omega}^\prime$ into angle ${\hat{\Omega}}$ and energy $E^\prime$ into energy $E$.
-The term is integrated over $\hat{\Omega}^\prime$ and $E^\prime$ to result in a quantity that includes contributions from all possible starting angles and energies.
-
-The source term $q\left(\vec{r},\hat{\Omega},E,t\right)$
-represents the gain of neutrons in a region of phase space from external sources.
-It is usually a prescribed quantity.
-
-In problems with no time dependence, the time-dependent term can be removed from the transport equation,
-and the angular flux is represented in six-dimensional phase space as $\psi\left(\vec{r},\hat{\Omega},E\right)$.
-The time-independent transport equation is given by
-
+The time-independent version is given by 
 \begin{multline}\label{eq:bg:rt:transport}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
-  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
-  \int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) = \\
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime +
   q\left(\vec{r},\hat{\Omega},E\right).
 \end{multline}
 
-% TO REFERENCE: \ref{eq:bg:rt:transport}
+%-------------------------------------------------------------------------------
+\subsubsection{Operator Notation}
+\label{sec:bg:rt:te:on}
+%-------------------------------------------------------------------------------
 
-The transport equation is sometimes written in operator notation, where the streaming, collision, and scattering terms are all combined into a single term known as the transport operator $H$.
-The transport equation is written in operator notation simply as
-
-\begin{equation}\label{eq:bg:rt:transport-operator}
+It is often useful to write the transport equation in operator notation.
+In this case, the time-independent \textit{transport operator} $H$ operates on the angular flux $\psi$ and is given by
+\begin{multline}\label{eq:bg:rt:transport-operator}
+  H\psi \equiv
+  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime.
+\end{multline}
+The transport equation in operator notation is then simply
+\begin{equation}\label{eq:bg:rt:transport-opnot}
   H\psi = q.
 \end{equation}
 
-There are two main classes of methods for solving the transport equation: the Monte Carlo method and deterministic methods.
-These methods will be explored in Sections \ref{sec:bg:rt:mc} and \ref{sec:bg:rt:determ}.
-
 %===============================================================================
 \subsection{Adjoint Transport Equation}
-\label{sec:bg:rt:adjoint}
-%===============================================================================
-
-In radiation transport, it is often useful to consider the concept of the ''adjoint'' flux.
-Consider a standard problem with a source and a detector.
-In the forward system, particles stream outward from the source and a response is calculated at the detector.
-In the adjoint system, particles instead stream outward from the detector and a response is calculated at the source.
-The forward detector is thus the same thing as the "adjoint source," and the forward source is thus the same thing as the "adjoint detector."
-
-The reason the adjoint flux is useful is that if the adjoint source is defined to be some quantity of interest in the forward system, then the adjoint flux in a region of phase space can be through of as the importance of that region of phase space to the quantity of interest.
-In other words, if a forward source is placed at some location, the adjoint flux at that location will indicate how much that source will contribute to the detector response.
-
-The adjoint transport equation in operator notation is given by
-
-\begin{equation}\label{eq:bg:rt:adjoint-transport-operator}
-  H^+\psi^+ = q^+
-\end{equation}
-
-where $H^+$ is the adjoint transport operator, $\psi^+$ is the adjoint flux, and $q^+$ is the adjoint source.
-$H^+$ is defined in such a way that $H$ and $H^+$ are adjoint to each other, and this property means the adjoint identity
-
-\begin{equation}\label{eq:bg:rt:adjoint-identity}
-  \left<\psi,q^+\right> =
-  \left<\psi^+,q\right>,
-\end{equation}
-
-where $\left<\right>$ represents integration over all independent variables, holds.
-
-After expanding the adjoint transport operator, the adjoint transport equation is given by
-
-\begin{multline}\label{eq:bg:rt:adjoint-transport}
-  -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
-  \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) - \\
-  \int_0^\infty\int_{4\pi}\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime =
-  q^+\left(\vec{r},\hat{\Omega},E\right).
-\end{multline}
-
-If the adjoint source is defined to be the same as the forward detector, then the detector response $R$ can be calculated as
-
-\begin{equation}\label{eq:bg:rt:detector-response}
-  R = \left<\psi,q^+\right>
-    = \left<\psi^+,q\right>.
-\end{equation}
-
-% Current, contributon flux, etc.
-
-%===============================================================================
-\subsection{Monte Carlo Methods}
-\label{sec:bg:rt:mc}
-%===============================================================================
-
-The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
-It allows for detailed representations of geometry and continuous energy and angle space.
-However, it is quite compuationally expensive because many particles may need to be simulated in order to achieve reliable results.
-Thus, it can take a long time (up to computer years in the most complicated systems) in order to obtain results.
-These computing requirements are usually managed by utilizing the resources of a computer cluster.
-
-%-------------------------------------------------------------------------------
-\subsubsection{MCNP}
-\label{sec:bg:rt:mc:mcnp}
-%-------------------------------------------------------------------------------
-
-The \ac{mcnp} transport code \cite{mcnp620} is a powerful and widely-used parallel Monte Carlo code developed at Los Alamos National Laboratory.
-
-MCNP allows for arbitrary geometry representations using a text-based \ac{csg} language.
-It operates in continuous energy space and is designed to track particles over a wide range of energies.
-It can track many different types of neutral and charged particles, with neutrons, photons, electrons, and protons being the most common.
-It is used for nuclear analysis and design in a wide range of applications, including radiation protection, shielding, radiography, medical physics, criticality safety, detectors, accelerators, fission reactors, and fusion reactors.
-
-%===============================================================================
-\subsection{Deterministic Methods}
-\label{sec:bg:rt:determ}
-%===============================================================================
-
-Deterministic methods solve the transport equation directly and produce detailed solutions throughout the entire phase space.
-However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainties in the results.
-Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
-% Hence, it requires a significant degree of expertise and insight to mitigate these undesirable characteristics and produce useful results.
-For these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
-
-The main advantage of deterministic methods when compared to the Monte Carlo method is that they are significantly less computationally expensive.
-
-Denovo \cite{denovo} is a powerful parallel 3D deterministic code developed at Oak Ridge National Laboratory.
-It uses the discrete ordinates (S\textsubscript{N}), multigroup energy, and anisotropic P\textsubscript{n} approximations.
-It can solve both the forward and adjoint transport equations.
-It has several spatial discretization algorithms and angle quadrature sets.
-
-%-------------------------------------------------------------------------------
-\subsubsection{ADVANTG}
-\label{sec:bg:rt:determ:advantg}
-%-------------------------------------------------------------------------------
-
-The easiest way to run Denovo calculations is with the \ac{advantg} \cite{advantg}, which is also developed at Oak Ridge National Laboratory.
-The main purpose of ADVANTG is to generate variance reduction parameters for use in MCNP simulations, but it can also be used to run Denovo without calculating variance reduction parameters.
-Here are the main steps involved when using ADVANTG to drive a deterministic calculation:
-
-\begin{itemize}
-  \item Extract the geometry, materials, sources, and tallies from the MCNP model
-  \item Discretize the geometry, sources, and tallies to conform to a user-supplied spatial grid and multigroup cross section library
-  \item Mix the materials togetherso that each mesh element contains just one material
-  \item Execute Denovo (forward, adjoint, or both)
-  \item Write output to file
-\end{itemize}
-
-The main outputs of ADVANTG when it it is used to drive deterministic calculations are Silo files \cite{silo}.
-These files contain the spatial grid, the mixed materials, sources, and tallies mapped onto the grid, thte scalar forward and adjoint fluxes, and the contributon flux.
-The data contained in the Silo files can be visualized easily with the VisIT software \cite{visit}.
-
-There are no documented user options which allow users to access the forward or adjoint angular flux data.
-However, ADVANTG contains an undocumented feature which allows for the full angular data to be written to an HDF5 file \cite{hdf5}.
-
-%===============================================================================
-\subsection{Variance Reduction and Hybrid Methods}
-\label{sec:bg:rt:vr}
+\label{sec:bg:rt:ate}
 %===============================================================================
