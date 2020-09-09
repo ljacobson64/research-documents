@@ -143,6 +143,82 @@ The transport equation in operator notation is then simply
 \end{equation}
 
 %===============================================================================
-\subsection{Adjoint Transport Equation}
-\label{sec:bg:rt:ate}
+\subsection{Adjoint Transport}
+\label{sec:bg:rt:at}
 %===============================================================================
+
+Given an operator $H$ and the functions $\zeta$ and $\zeta^+$, the adjoint operator $H^+$ is defined by the \textit{adjoint identity}
+\begin{equation}\label{eq:bg:rt:adjoint-identity}
+  \left<\zeta^+H\zeta\right> =
+  \left<\zeta H^+\zeta^+\right>,
+\end{equation}
+where $\left<\right>$ denotes integration over all independent variables.
+
+It is often useful to consider adjoint transport, as distinct from forward (regular) transport.
+An adjoint transport operator $H^+$ exists which satisfies the adjoint identity and operates on the \textit{adjoint flux} $\psi^+$.
+The adjoint transport equation in operator notation is
+\begin{equation}\label{eq:bg:rt:adjtransport-opnot}
+  H^+\psi^+ = q^+,
+\end{equation}
+where $q^+$ is the adjoint source.
+It is most useful to define the adjoint source as some detector response in the forward system.
+
+Adjoint transport can be thought of as running in reverse when compared to forward transport.
+In a system with a source and a detector, particles stream outward from the source and a response is calculated at the detector.
+Adjoint particles, however, stream outward from the detector and a response is calculated at the source.
+Adjoint particles also undergo scattering in reverse, gaining energy through scattering instead of losing energy.
+
+There is a physical interpretation of the adjoint flux: the adjoint flux at a point is equal to the \textit{importance} of particles emitted at that point to the detector response.
+In other words, the adjoint flux at some location $\vec{r}_0, \hat{\Omega}_0, E_0$ indicates how much a source at that location would contribute to the detector response.
+
+The time-independent adjoint operator $H^+$ operates on the adjoint angular flux $\psi^+$ and is given by
+\begin{multline}\label{eq:bg:rt:transport-operator}
+  H^+\psi^+ \equiv
+  -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
+  \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) - \\
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime.
+\end{multline}
+
+After expanding the adjoint transport operator, the adjoint transport equation is given by
+\begin{multline}\label{eq:bg:rt:adjoint-transport}
+  -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
+  \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) = \\
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime +
+  q^+\left(\vec{r},\hat{\Omega},E\right).
+\end{multline}
+
+The detector response $R$ can be calculated in two ways:
+\begin{equation}\label{eq:bg:rt:detector-response}
+  R = \left<\psi,q^+\right>
+    = \left<\psi^+,q\right>.
+\end{equation}
+
+%===============================================================================
+\subsection{Adjoint and Combined Particle Distributions}
+\label{sec:bg:rt:at:apd}
+%===============================================================================
+
+Several important particle distributions that exist in forward transport also exist in adjoint transport.
+The adjoint scalar flux is defined as
+\begin{equation}\label{eq:bg:rt:scalar-flux}
+  \phi^+\left(\vec{r},E,t\right) \equiv
+  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E,t\right)d\hat{\Omega}.
+\end{equation}
+The adjoint current vector is defined as
+\begin{equation}\label{eq:bg:rt:current-vector}
+  \vec{J}^+\left(\vec{r},E,t\right) \equiv
+  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E,t\right)\hat{\Omega} d\hat{\Omega}.
+\end{equation}
+
+There are also some distributions that combine both the forward and adjoint flux.
+The angular \textit{contributon flux} is defined as the product of the forward and adjoint angular fluxes:
+\begin{equation}\label{eq:bg:rt:angular-contributon}
+  \psi_{contrib}\left(\vec{r},\hat{\Omega},E,t\right) \equiv
+  \psi\left(\vec{r},\hat{\Omega},E,t\right)\psi^+\left(\vec{r},-\hat{\Omega},E,t\right).
+\end{equation}
+The scalar contributon flux is obtained by integrating the angular contribution flux over angle:
+\begin{equation}\label{eq:bg:rt:angular-contributon}
+  \phi_{contrib}\left(\vec{r},E,t\right) \equiv
+  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)\psi^+\left(\vec{r},-\hat{\Omega},E,t\right)d\hat{\Omega}.
+\end{equation}
+Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes. It is important to integrate over energy after multiplying the forward and angular fluxes, not before.
