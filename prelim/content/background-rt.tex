@@ -3,19 +3,29 @@
 \label{sec:bg:rt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Much of the information in this section is paraphrased from Lewis \& Miller \cite{lewis_miller}.
+The most fundamental equation in radiation transport is the transport equation, which is sometimes referred to as the neutron transport equation or the Boltzmann equation.
+The transport equation can be used to solve for the particle flux, which is a measure of how many particles are passing through an area per unit time.
+Calculating the flux at some location or locations is almost always necessary when performing radiation transport calculations.
+
+This section describes the transport equation, the concept of adjoint transport, and two classes of methods used to solve the transport equation: deterministic methods and the Monte Carlo method.
+
+% Much of the information in sections \ref{sec:bg:rt:te} and \ref{sec:bg:rt:at} is paraphrased from the textbook by Lewis \& Miller \cite{lewis_miller}.
+Much of the information in this section is paraphrased from the textbook by Lewis \& Miller \cite{lewis_miller}.
 
 %===============================================================================
 \subsection{Transport Equation}
 \label{sec:bg:rt:te}
 %===============================================================================
 
+Placeholder
+
 %-------------------------------------------------------------------------------
 \subsubsection{Particle Distributions}
 \label{sec:bg:rt:te:pd}
 %-------------------------------------------------------------------------------
 
-In general, there are seven independent variables that are required to fully describe the distribution of neutrons: three coordinates specifying position ($\vec{r}$), two angles specifying the particle's direction of travel ($\hat{\Omega}$), the particle's energy ($E$), and time ($t$).
+In general, there are seven independent variables that are required to fully describe the distribution of particles: three coordinates specifying position ($\vec{r}$), two angles specifying the particle's direction of travel ($\hat{\Omega}$), the particle's energy ($E$), and time ($t$).
+These seven variables describe the \textit{phase space} of a problem.
 
 The most fundamental dependent variable in transport theory is the \textit{particle density distribution}.
 The particle density distribution $N\left(\vec{r},\hat{\Omega},E,t\right)dEd\hat{\Omega}dV$ is defined as the number of particles in a volume element $dV$ about $\vec{r}$ traveling in the cone of directions $d\hat{\Omega}$ about $\hat{\Omega}$ with energies between $E$ and $E + dE$ at time $t$.
@@ -105,7 +115,7 @@ Fission sources will not be considered in this work.
 
 %-------------------------------------------------------------------------------
 \subsubsection{Transport Equation with Explicit Scattering Source}
-\label{sec:bg:rt:te:te2}
+\label{sec:bg:rt:te:te-scatter}
 %-------------------------------------------------------------------------------
 
 Separating the total source term in the time-independent transport equation into its external and scattering components yields
@@ -194,7 +204,7 @@ The detector response $R$ can be calculated in two ways:
 \end{equation}
 
 %===============================================================================
-\subsection{Adjoint and Combined Particle Distributions}
+\subsubsection{Adjoint and Combined Particle Distributions}
 \label{sec:bg:rt:at:apd}
 %===============================================================================
 
@@ -222,3 +232,108 @@ The scalar contributon flux is obtained by integrating the angular contribution 
   \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)\psi^+\left(\vec{r},-\hat{\Omega},E,t\right)d\hat{\Omega}.
 \end{equation}
 Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes. It is important to integrate over energy after multiplying the forward and angular fluxes, not before.
+
+%===============================================================================
+\subsection{Deterministic Methods}
+\label{sec:bg:rt:determ}
+%===============================================================================
+
+Deterministic methods aim to solve the transport equation directly, and they generally produce detailed solutions throughout the entire phase space (space, angle, and energy) of a problem.
+
+The most common types of deterministic methods used to solve the transport equation are the \textit{discrete ordinates methods}.
+In three spatial dimensions, discrete ordinates methods are known as S\textsubscript{N} methods.
+In the discrete ordinates method, phase space is divided into discrete sections, and particles can be thought of as moving from section to section.
+Physical space is divided into boxes, angle space is divided into discrete angles, and energy space is divided into energy bins.
+Figure \ref{fig:bg:discrete-ordinates} shows a visualization of the type of angle discretization present in S\textsubscript{N} methods.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\textwidth]{content/background/discrete_ordinates.png}
+  \caption{Visualization of the S\textsubscript{8} discrete ordinates set (taken from \cite{lewis_miller}.)}
+  \label{fig:bg:discrete-ordinates}
+\end{figure}
+
+This discretization introduces uncertainties in the results.
+Real-world geometries cannot be perfectly divided into boxes, real-world particles can move in any direction, and real-world cross sections are continuous in energy.
+It is possible to increase the fidelity of a model by decreasing the size of the boxes, but at the cost of an increased amount of computation.
+Additionally, discrete ordinates methods can sometimes produce non-physical results such as ray effects (caused by the angle discretization) and negative fluxes (caused by certain types of spatial discretization).
+
+For all of these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
+
+Deterministic methods are not entirely without use though.
+For example, in deep penetration problems (with which Monte Carlo methods have considerably difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
+In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation; an approximate solution is sufficient.
+
+%-------------------------------------------------------------------------------
+\subsubsection{Denovo}
+\label{sec:bg:rt:determ:denovo}
+%-------------------------------------------------------------------------------
+
+Denovo \cite{denovo} is a powerful block-parallel S\textsubscript{N} code developed at Oak Ridge National Laboratory.
+It uses the multigroup energy and anisotropic P\textsubscript{n} approximations, and it can solve both the forward and adjoint transport equations.
+It has several spatial discretization algorithms and angle quadrature sets and has numerous additional options and features that allow users to control problem parameters.
+Denovo has been used to solve problems with over a billion voxels.
+
+%===============================================================================
+\subsection{Monte Carlo Method}
+\label{sec:bg:rt:mc}
+%===============================================================================
+
+Placeholder
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1.0\textwidth]{content/background/monte_carlo.png}
+  \caption{Visualization of a random history of a neutron entering a slab of fissionable material (taken from \cite{mcnp5_vol1}.)}
+  \label{fig:bg:monte-carlo}
+\end{figure}
+
+%-------------------------------------------------------------------------------
+\subsubsection{MCNP}
+\label{sec:bg:rt:mc:mcnp}
+%-------------------------------------------------------------------------------
+
+Placeholder
+
+%-------------------------------------------------------------------------------
+\subsection{ADVANTG}
+\label{sec:bg:rt:advantg}
+%-------------------------------------------------------------------------------
+
+The \ac{advantg} \cite{advantg} software developed at Oak Ridge National Laboratory provides easy access to the Denovo discrete ordinates solver.
+The main purpose of ADVANTG is to generate variance reduction parameters for use in Monte Carlo simulations, but it can also be used simply to drive Denovo calculations without calculating any variance reduction parameters.
+
+Here are the main steps involved when using ADVANTG to drive a Denovo calculation:
+\begin{itemize}
+  \item Generate an MCNP ``runtpe'' file from the user-supplied MCNP input file.
+  \item Extract information about the geometry, materials, sources, and tallies from the runtpe file.
+  \item Mix the multigroup cross sections.
+  \item Map the materials, sources, and tallies onto the spatial grid and energy bins.
+  \item Execute Denovo (forward transport, adjoint transport, or both.)
+  \item Write output to file.
+\end{itemize}
+
+ADVANTG contains a number of multigroup cross section libraries for neutrons and gammas.
+These libraries contain data for up to 393 different isotopes, and are based on the ENDF/B-VII.0 \cite{endfb7.0} evaluated nuclear data library.
+
+Materials are mapped onto the spatial mesh via ray tracing.
+Track-length tallies are used to calculate the volume fraction of each material in each voxel.
+If two voxels have the material volume fractions that are not exactly the same but are similar to within a user-specified tolerance, then ADVANTG will treat them as the same material to conserve memory.
+
+ADVANTG can handle both point sources and volume sources, and it calculates the multigroup energy spectrum for each source.
+Point sources often cause unwanted ray effects, so first-collided sources based on the uncollided flux distribution are calculated by default for point sources.
+In this case, the total flux is then the sum of the uncollided flux and the result of the discrete ordinates calculation for the first-collided source.
+This feature is also available for volume sources, but it is not enabled by default.
+
+Point sources are mapped onto the spatial mesh exactly.
+Volume sources are mapped onto the spatial mesh stochastically by sampling source particles and tallying the weight of particles born in each voxel.
+
+Surface, cell, and mesh tallies are mapped onto the spatial mesh via the same process as the material mapping. A multigroup energy spectrum is calculated for each tally which is based on MCNP dose responses or tally multipliers.
+
+The main outputs of ADVANTG when it it is used to drive deterministic calculations are Silo files \cite{silo}.
+These files contain information about the spatial grid, mixed materials, sources, and tallies mapped onto the grid, the scalar forward and adjoint fluxes, and the contributon flux.
+The data contained in the Silo files can be visualized easily with the VisIT software \cite{visit}.
+
+Denovo calculates the full forward and angular angular fluxes as part of its calculation process.
+However, there are no documented user options which allow users to access this angular flux data.
+Luckily, ADVANTG does contain an undocumented feature which allows for the full angular flux data to be written to an HDF5 file \cite{hdf5}.

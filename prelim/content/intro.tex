@@ -5,18 +5,18 @@ When analyzing nuclear systems such as fission reactors, fission reactors, and a
 The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
 It allows for detailed representations of geometry and continuous energy and angle space.
 However, it is quite computationally expensive because many particles may need to be simulated in order to achieve reliable results.
-Thus, it can take a long time (up to computer years in the most complicated systems) in order to obtain results.
+Thus, it can take a long time (computer years in the most complicated systems) in order to obtain results.
 These computing requirements are usually managed by utilizing the resources of a computer cluster.
 
 Another class of radiation transport methods are known as deterministic methods.
-Deterministic solvers like Denovo \cite{denovo} solve the transport equation directly and produce detailed solutions throughout the entire phase space.
+Deterministic solvers like Denovo \cite{denovo} solve the transport equation directly, and they generally produce detailed solutions throughout the entire phase space (space, angle, and energy) of a problem.
 However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainties in the results.
 Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
 For these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
 
 Deterministic methods are not entirely without use though.
-For example, in deep penetration problems, deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
-In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation.
+For example, in deep penetration problems (with which Monte Carlo methods have considerably difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
+In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation; an approximate solution is sufficient.
 
 When a nuclear system is in the design phase, many parametric studies of Monte Carlo simulations must be performed in order to approach an optimal configuration of geometry and materials.
 These parametric studies can take an enormous amount of computational resources, given that each data point requires its own Monte Carlo simulation.
