@@ -27,35 +27,37 @@ Placeholder
 In general, there are seven independent variables that are required to fully describe the distribution of particles: three coordinates specifying position ($\vec{r}$), two angles specifying the particle's direction of travel ($\hat{\Omega}$), the particle's energy ($E$), and time ($t$).
 These seven variables describe the \textit{phase space} of a problem.
 
+In steady-state problems, there is no dependence on time, and thus there are only six independent variables (three for position, two for angle, and one for energy.) The remainder of this work will only consider time-independent problems, so the dependence on time will be neglected.
+
 The most fundamental dependent variable in transport theory is the \textit{particle density distribution}.
-The particle density distribution $N\left(\vec{r},\hat{\Omega},E,t\right)dEd\hat{\Omega}dV$ is defined as the number of particles in a volume element $dV$ about $\vec{r}$ traveling in the cone of directions $d\hat{\Omega}$ about $\hat{\Omega}$ with energies between $E$ and $E + dE$ at time $t$.
+The particle density distribution $N\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}dV$ is defined as the number of particles in a volume element $dV$ about $\vec{r}$ traveling in the cone of directions $d\hat{\Omega}$ about $\hat{\Omega}$ with energies between $E$ and $E + dE$.
 
 The particle density distribution is rarely directly considered in transport calculations, however.
 The most common quantity considered is the \textit{angular flux}:
 \begin{equation}\label{eq:bg:rt:angular-flux}
-  \psi\left(\vec{r},\hat{\Omega},E,t\right) \equiv vN\left(\vec{r},\hat{\Omega},E,t\right)
+  \psi\left(\vec{r},\hat{\Omega},E\right) \equiv vN\left(\vec{r},\hat{\Omega},E\right)
 \end{equation}
 where $v$ is the particle speed.
 
 It is sometimes useful to consider the flux independent of angle.
 In these cases, the \textit{scalar flux} may be considered:
 \begin{equation}\label{eq:bg:rt:scalar-flux}
-  \phi\left(\vec{r},E,t\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)d\hat{\Omega}.
+  \phi\left(\vec{r},E\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
 
 The \textit{current vector}, which is a measure of the directionality of particles, is defined as
 \begin{equation}\label{eq:bg:rt:current-vector}
-  \vec{J}\left(\vec{r},E,t\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)\hat{\Omega} d\hat{\Omega}.
+  \vec{J}\left(\vec{r},E\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega} d\hat{\Omega}.
 \end{equation}
 
 The \textit{reaction rate} for reactions of type $x$ is
 \begin{equation}\label{eq:bg:rt:rxn-rate-angular}
-  R = \int_V\int_{4\pi}\int_0^\infty\sigma_x\left(\vec{r},\hat{\Omega},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)dEd\hat{\Omega}dV
+  R = \int_V\int_{4\pi}\int_0^\infty\sigma_x\left(\vec{r},\hat{\Omega},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}dV
 \end{equation}
 where $\sigma_x$ is the cross section for reaction $x$.
 Cross sections are almost always independent of the particle direction, so the reaction rate equation can be simplified as
 \begin{equation}\label{eq:bg:rt:rxn-rate-scalar}
-  R = \int_V\int_0^\infty\sigma_x\left(\vec{r},E\right)\phi\left(\vec{r},E,t\right)dEdV.
+  R = \int_V\int_0^\infty\sigma_x\left(\vec{r},E\right)\phi\left(\vec{r},E\right)dEdV.
 \end{equation}
 
 If $\sigma_x$ refers to the total cross section $\sigma_t$, then the reaction rate is referred to as the \textit{collision density}.
@@ -68,19 +70,12 @@ If $\sigma_x$ refers to the total cross section $\sigma_t$, then the reaction ra
 The transport equation is a balance between all possible mechanisms for the number of particles in $dEd\hat{\Omega}dV$ to change.
 There are three such mechanisms:
 \begin{enumerate}
-  \item net streaming out of $dV$, given by the streaming term $\hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right)$,
-  \item collisions in $dV$ that result in particle absorption or scattering out of $dEdV$, given by the collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right)$, and
-  \item emission of particles in $dV$ (includes external sources, scattering, and fission), given by a general source term $q\left(\vec{r},\hat{\Omega},E,t\right)$.
+  \item net streaming out of $dV$, given by the streaming term $\hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right)$,
+  \item collisions in $dV$ that result in particle absorption or scattering out of $dEdV$, given by the collision term $\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)$, and
+  \item emission of particles in $dV$ (includes external sources, scattering, and fission), given by a general source term $q\left(\vec{r},\hat{\Omega},E\right)$.
 \end{enumerate}
 
-The time-dependent transport equation is a balance between these three processes, and it is given by
-\begin{equation}\label{eq:bg:rt:transport-totsrc-timedep}
-  \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
-  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
-  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) =
-  q\left(\vec{r},\hat{\Omega},E,t\right).
-\end{equation}
-If the dependence on time is neglected, the time-dependent term disappears. The time-independent transport equation is given by
+The time-independent transport equation is a balance between these three processes, and it is given by
 \begin{equation}\label{eq:bg:rt:transport-totsrc}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) =
@@ -92,41 +87,28 @@ If the dependence on time is neglected, the time-dependent term disappears. The 
 \label{sec:bg:rt:te:st}
 %-------------------------------------------------------------------------------
 
-The source term $q\left(\vec{r},\hat{\Omega},E,t\right)$ includes contributions from three sources: external sources, scattering, and fission.
+The source term $q\left(\vec{r},\hat{\Omega},E\right)$ includes contributions from three sources: external sources, scattering, and fission.
 It can be represented as a sum of these three contributions:
 \begin{equation}\label{eq:bg:rt:source}
   q = q_{ex} + q_s + q_f.
 \end{equation}
 
 External sources are known distributions of source particles that are entirely independent of the flux.
-External sources are represented as a known distribution $q_{ex}\left(\vec{r},\hat{\Omega},E,t\right)$.
+External sources are represented as a known distribution $q_{ex}\left(\vec{r},\hat{\Omega},E\right)$.
 
 Scattering sources are the result of particles scattering from one angle and energy to another.
 Particles at the original angle and energy are removed from the system while particles at the new angle and energy are born.
 The source due to scattering is given by the scattering term:
 \begin{equation}\label{eq:bg:rt:scattering-term}
-  q_s\left(\vec{r},\hat{\Omega},E,t\right) \equiv
-  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)dE^\prime d\hat{\Omega}^\prime
+  q_s\left(\vec{r},\hat{\Omega},E\right) \equiv
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime
 \end{equation}
 where the scattering cross section $\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)$ is the cross section for particles to scatter from $\hat{\Omega}^\prime$ into $\hat{\Omega}$ and $E^\prime$ into $E$.
 
 Fission sources only occur if a multiplying medium exists in the system.
 Fission sources will not be considered in this work.
 
-%-------------------------------------------------------------------------------
-\subsubsection{Transport Equation with Explicit Scattering Source}
-\label{sec:bg:rt:te:te-scatter}
-%-------------------------------------------------------------------------------
-
 Separating the total source term in the time-independent transport equation into its external and scattering components yields
-\begin{multline}\label{eq:bg:rt:transport-timedep}
-  \frac{1}{v}\frac{\partial}{\partial t}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
-  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E,t\right) +
-  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E,t\right) = \\
-  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime,t\right)dE^\prime d\hat{\Omega}^\prime +
-  q\left(\vec{r},\hat{\Omega},E,t\right).
-\end{multline}
-The time-independent version is given by 
 \begin{multline}\label{eq:bg:rt:transport}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) = \\
@@ -211,25 +193,25 @@ The detector response $R$ can be calculated in two ways:
 Several important particle distributions that exist in forward transport also exist in adjoint transport.
 The adjoint scalar flux is defined as
 \begin{equation}\label{eq:bg:rt:scalar-flux}
-  \phi^+\left(\vec{r},E,t\right) \equiv
-  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E,t\right)d\hat{\Omega}.
+  \phi^+\left(\vec{r},E\right) \equiv
+  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
 The adjoint current vector is defined as
 \begin{equation}\label{eq:bg:rt:current-vector}
-  \vec{J}^+\left(\vec{r},E,t\right) \equiv
-  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E,t\right)\hat{\Omega} d\hat{\Omega}.
+  \vec{J}^+\left(\vec{r},E\right) \equiv
+  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega} d\hat{\Omega}.
 \end{equation}
 
 There are also some distributions that combine both the forward and adjoint flux.
 The angular \textit{contributon flux} is defined as the product of the forward and adjoint angular fluxes:
 \begin{equation}\label{eq:bg:rt:angular-contributon}
-  \psi_{contrib}\left(\vec{r},\hat{\Omega},E,t\right) \equiv
-  \psi\left(\vec{r},\hat{\Omega},E,t\right)\psi^+\left(\vec{r},-\hat{\Omega},E,t\right).
+  \psi_{contrib}\left(\vec{r},\hat{\Omega},E\right) \equiv
+  \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right).
 \end{equation}
 The scalar contributon flux is obtained by integrating the angular contribution flux over angle:
 \begin{equation}\label{eq:bg:rt:angular-contributon}
-  \phi_{contrib}\left(\vec{r},E,t\right) \equiv
-  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E,t\right)\psi^+\left(\vec{r},-\hat{\Omega},E,t\right)d\hat{\Omega}.
+  \phi_{contrib}\left(\vec{r},E\right) \equiv
+  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
 Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes. It is important to integrate over energy after multiplying the forward and angular fluxes, not before.
 
