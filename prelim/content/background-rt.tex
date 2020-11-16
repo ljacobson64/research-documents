@@ -261,7 +261,15 @@ Denovo has been used to solve problems with over a billion voxels.
 \label{sec:bg:rt:mc}
 %===============================================================================
 
-Placeholder
+The Monte Carlo method takes a fundamentally different approach to solving the transport equation than deterministic methods.
+In the Monte Carlo method, individual particles are simulated, and results are inferred from the average particle behavior.
+Results are only obtained for specific quantities, called tallies, that are requested by the user.
+Phase space is not discretized, so accurate results can be obtained for highly complicated problems.
+
+Monte Carlo codes use random numbers to sample probability distributions that specify the likelihood that a particle will undergo various physical processes.
+Random numbers are used to sample the distance a particle travels before undergoing an interaction, called the path length, and they are also used to randomly sample the type of interaction that occurs, examples of which are scattering, absorption, and fission.
+Secondary particles, such as a photon being created due to a neutron inelastic scattering event, are also tracked.
+Figure \ref{fig:bg:monte-carlo} shows an example of a random particle history simulated by a Monte Carlo code. 
 
 \begin{figure}[h!]
   \centering
@@ -270,12 +278,25 @@ Placeholder
   \label{fig:bg:monte-carlo}
 \end{figure}
 
+Since Monte Carlo codes simulate particles randomly and infer results based on average particle behavior, every result obtained from Monte Carlo codes have an associated uncertainty.
+The more particles simulated, the lower the uncertainty.
+For highly complex problems, the number of particles that must be simulated in order to obtain reliable results is on the order of billions.
+This means that Monte Carlo simulations are generally much more computationally expensive than determinstic simulations.
+
 %-------------------------------------------------------------------------------
 \subsubsection{MCNP}
 \label{sec:bg:rt:mc:mcnp}
 %-------------------------------------------------------------------------------
 
-Placeholder
+The \ac{mcnp} transport code \cite{mcnp620} is a powerful and widely-used parallel Monte Carlo code developed at Los Alamos National Laboratory.
+
+MCNP allows for arbitrary geometry representations using a text-based \ac{csg} language.
+It operates in continuous energy space and is designed to track particles over a wide range of energies.
+It can track many different types of neutral and charged particles, with neutrons, photons, and electrons being the most common.
+It is used for nuclear analysis and design in a wide range of applications, including radiation protection, shielding, radiography, medical physics, criticality safety, detectors, accelerators, fission reactors, and fusion reactors.
+
+Users must create an input file to run MCNP.
+The input file contains the problem geometry, material assignments and definitions, source definition, and tally definitions, and may also contain numerous other parameters which alter the code's operation in some way.
 
 %-------------------------------------------------------------------------------
 \subsection{ADVANTG}
