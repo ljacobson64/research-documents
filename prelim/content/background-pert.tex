@@ -3,79 +3,77 @@
 \label{sec:bg:pert}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Placeholder
+Perturbation theory is a mathematical technique that aims to find an approximate solution to a problem by first finding an exact solution to a related but simpler problem.
+It is often used to solve problems that do not have an exact solution but are similar to a problems that do have an exact solution.
+The technique involves breaking a problem into solvable and perturbed parts.
+
+In radiation transport problems, perturbation theory has traditionally been used to estimate the effect of a small alteration in a fission reactor on its reactivity.
+The idea of using perturbation theory to calculate parameters other than the reactivity, for nuclear systems that are not reactors, is a relatively more recent development.
+
+Greenspan showed in 1974 that perturbation techniques can be used to calculate the effect of a perturbation on the flux distribution in inhomogeneous, or fixed-source, problems \cite{greenspan}. The following section describes his work.
 
 %===============================================================================
-\subsection{Greenspan}
+\subsection{Detector Response in Inhomogeneous Systems}
 \label{sec:bg:pert:greenspan}
 %===============================================================================
 
-Reference to Greenspan \cite{greenspan}.
-
-% Equation 29
-\begin{equation*}
+The transport equation in operator notation is given by
+\begin{equation}\label{eq:bg:pt:green29}
   H\psi = q
-\end{equation*}
-
-% Equation 163
-\begin{equation*}
+\end{equation}
+where $H$ is the transport operator, $\psi$ is the angular flux, and $q$ is the fixed source.
+Similarly, the adjoint transport equation in operator notation is given by
+\begin{equation}\label{eq:bg:pt:green163}
   H^+\psi^+ = q^+
-\end{equation*}
+\end{equation}
+where $H^+$ is the adjoint transport operator, $\psi^+$ is the adjoint angular flux, and $q^+$ is the adjoint source.
 
-% Equation 44a
-\begin{equation*}
-  \bar{H}\delta\psi = \delta q - \delta H\psi
-\end{equation*}
+In the perturbed system, the forward and adjoint transport equations are given by
+\begin{equation}\label{eq:bg:pt:green29_pert}
+  \bar{H}\bar{\psi} = q
+\end{equation}
+and
+\begin{equation}\label{eq:bg:pt:green163_pert}
+  \bar{H}^+\bar{\psi}^+ = q^+,
+\end{equation}
+where $\bar{H}$ is the perturbed transport operator, $\bar{\psi}$ is the perturbed flux, $\bar{H}^+$ is the perturbed adjoint transport operator, and $\bar{\psi}^+$ is the perturbed adjoint flux.
 
-% Equation 44b
-\begin{equation*}
-  H\delta\psi = \delta q - \delta H\bar{\psi}
-\end{equation*}
+Combining Equations \ref{eq:bg:pt:green29} and \ref{eq:bg:pt:green29_pert} and rearranging terms yields the following identity:
+\begin{equation}\label{eq:bg:pt:green44a}\begin{split}
+  H\psi             & = \bar{H}\bar{\psi} \\
+  H\psi             & = \left(H+\delta H\right)\left(\psi+\delta\psi\right) \\
+  0                 & = H\delta\psi + \delta H\psi + \delta H\delta\psi \\
+  0                 & = \bar{H}\delta\psi + \delta H\psi \\
+  \bar{H}\delta\psi & = -\delta H\psi.
+\end{split}\end{equation}
 
-% Equation 164a
-\begin{equation*}
-  \bar{H}^+\delta\psi^+ = \bar{q}^+ - \bar{H}^+\psi^+ = \delta q^+ - \delta H^+\psi^+
-\end{equation*}
+If a detector has a response function $q^+$, then the detector response $R$ to an external source $q$ in the unperturbed system is given by
+\begin{equation}\label{eq:bg:pt:green168}
+  R = \left<\psi,q^+\right>
+    = \left<\psi^+,q\right>.
+\end{equation}
+In the perturbed system, the detector response $\bar{R}$ is given by
+\begin{equation}\label{eq:bg:pt:r_bar}
+  \bar{R} = \left<\bar{\psi},q^+\right>
+          = \left<\bar{\psi}^+,q\right>.
+\end{equation}
 
-% Equation 164b
-\begin{equation*}
-  H^+\delta\psi^+ = \delta q^+ - \delta H^+\bar{\psi}^+
-\end{equation*}
+The perturbation in the detector response $\delta R$ is defined as the difference between the detector response in the perturbed system and the detector response in the unperturbed system; i.e.
+\begin{equation}\label{eq:bg:pt:delta_r}
+  \delta R \equiv \bar{R} - R.
+\end{equation}
+Similarly, the perturbation in the flux $\delta\psi$ is defined as the difference between the flux in the perturbed system and the flux in the unperturbed system; i.e.
+\begin{equation}\label{eq:bg:pt:delta_psi}
+  \delta \psi \equiv \bar{\psi} - \psi.
+\end{equation}
+Lastly, the perturbation in the transport operator $\delta H$ is defined as the difference between the perturbed transport operator and the unperturbed transport operator; i.e.
+\begin{equation}\label{eq:bg:pt:delta_H}
+  \delta H \equiv \bar{H} - H.
+\end{equation}
 
-% Equation 168
-\begin{equation*}
-  R = \left<\psi,q^+\right> = \left<\psi^+,q\right>
-\end{equation*}
-
-% Equation 169
-\begin{equation*}
-  R = \left<\psi,H^+\psi^+\right> = \left<\psi^+,H\psi\right>
-\end{equation*}
-
-% Equation 170a
-\begin{equation*}\begin{split}
-  \delta R = \bar{R} - R & = \left<\bar{\psi},\bar{q}^+\right> - \left<\psi,q^+\right> \\
-                         & = \left<\psi,\delta q^+\right> + \left<\delta\psi,\bar{q}^+\right> \\
-                         & = \left<\psi,\delta q^+\right> + \left<\bar{\psi}^+,\left(\delta q - \delta H\psi\right)\right>
-\end{split}\end{equation*}
-
-% Equation 170b
-\begin{equation*}\begin{split}
-  \delta R = \bar{R} - R & = \left<\bar{\psi}^+,\bar{q}\right> - \left<\psi^+,q\right> \\
-                         & = \left<\psi^+,\delta q\right> + \left<\delta\psi^+,\bar{q}\right> \\
-                         & = \left<\psi^+,\delta q\right> + \left<\bar{\psi},\left(\delta q^+ - \delta H^+\psi^+\right)\right>
-\end{split}\end{equation*}
-
-% Equation 171a, 171b
-\begin{equation*}\begin{split}
-  \delta R & = \delta R^{(1)} + \left<\delta\psi^+,\left(\delta q-\delta H\psi\right)\right> \\
-           & = \delta R^{(1)} + \left<\delta\psi,\left(\delta q^+-\delta H^+\psi^+\right)\right>
-\end{split}\end{equation*}
-
-% Equation 172a, 172b
-\begin{equation*}\begin{split}
-  \delta R^{(1)} & = \left<\psi,\delta q^+\right> + \left<\psi^+,\left(\delta q - \delta H\psi\right)\right> \\
-                 & = \left<\psi^+,\delta q\right> + \left<\psi,\left(\delta q^+ - \delta H^+\psi^+\right)\right>
-\end{split}\end{equation*}
-
-% Something about how this has been worked out for eigenvalue problems, but not for fixed source problems
+$\delta R$ can thus be written as
+\begin{equation}\label{eq:bg:pt:green170a}\begin{split}
+  \delta R & = \left<\bar{\psi},q^+\right> - \left<\psi,q^+\right> \\
+           & = \left<\delta\psi,q^+\right> \\
+           & \stackrel{\includegraphics[height=\fontcharht\font`\B]{../pres-2019.08.30/thinking-face.png}}{=} \left<\psi^+,-\delta H\psi\right>.
+\end{split}\end{equation}
