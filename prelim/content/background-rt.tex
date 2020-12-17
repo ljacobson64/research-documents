@@ -158,7 +158,7 @@ In a system with a source and a detector, particles stream outward from the sour
 Adjoint particles, however, stream outward from the detector and a response is calculated at the source.
 Adjoint particles also undergo scattering in reverse, gaining energy through scattering instead of losing energy.
 
-There is a physical interpretation of the adjoint flux: the adjoint flux at a point is equal to the \textit{importance} of particles emitted at that point to the detector response.
+There is an important physical interpretation of the adjoint flux: the adjoint flux at a point is equal to the \textit{importance} of particles emitted at that point to the detector response.
 In other words, the adjoint flux at some location $\vec{r}_0, \hat{\Omega}_0, E_0$ indicates how much a source at that location would contribute to the detector response.
 
 The time-independent adjoint operator $H^+$ operates on the adjoint angular flux $\psi^+$ and is given by
@@ -183,35 +183,44 @@ The detector response $R$ can be calculated in two ways:
     = \left<\psi^+,q\right>.
 \end{equation}
 
-%===============================================================================
-\subsubsection{Adjoint and Combined Particle Distributions}
-\label{sec:bg:rt:at:apd}
-%===============================================================================
-
 Several important particle distributions that exist in forward transport also exist in adjoint transport.
 The adjoint scalar flux is defined as
 \begin{equation}\label{eq:bg:rt:scalar-flux}
   \phi^+\left(\vec{r},E\right) \equiv
-  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}.
+  \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}
 \end{equation}
-The adjoint current vector is defined as
+and the adjoint current vector is defined as
 \begin{equation}\label{eq:bg:rt:current-vector}
   \vec{J}^+\left(\vec{r},E\right) \equiv
   \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega} d\hat{\Omega}.
 \end{equation}
 
-There are also some distributions that combine both the forward and adjoint flux.
-The angular \textit{contributon flux} is defined as the product of the forward and adjoint angular fluxes:
+%===============================================================================
+\subsection{Contributon Flux}
+\label{sec:bg:rt:contrib}
+%===============================================================================
+
+The \textit{contributon flux} combines the properties of the forward flux and adjoint flux.
+The forward flux at a point represents the likelihood of particles at that point having been emitted by the source.
+The adjoint flux at a point represents the likelihood of particles at that point contributing to the detector response.
+Thus, the contributon flux at a point represents the likelihood of particles at that point both having been emitted by the source and contributing to the detector response.
+
+The forward flux is highest near the source, while the adjoint flux is highest near the detector.
+The contributon flux is highest along the path between the source and detector.
+Regions with the highest contributon flux can be thought of as being the most important regions in the problem because they have the highest likelihood of containing particles that were both emitted by the source and that will contribute to the detector response.
+
+The angular contributon flux $\Psi$ is defined simply as the product of the forward and adjoint angular fluxes:
 \begin{equation}\label{eq:bg:rt:angular-contributon}
-  \psi_{contrib}\left(\vec{r},\hat{\Omega},E\right) \equiv
+  \Psi\left(\vec{r},\hat{\Omega},E\right) \equiv
   \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right).
 \end{equation}
-The scalar contributon flux is obtained by integrating the angular contribution flux over angle:
+The scalar contributon flux $\Phi$ is obtained by integrating the angular contribution flux over angle:
 \begin{equation}\label{eq:bg:rt:angular-contributon}
-  \phi_{contrib}\left(\vec{r},E\right) \equiv
+  \Phi\left(\vec{r},E\right) \equiv
   \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
-Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes. It is important to integrate over energy after multiplying the forward and angular fluxes, not before.
+Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes.
+It is important to calculate the scalar contributon flux by first multiplying the forward and angular fluxes and then integrating over energy, not the other way around.
 
 %===============================================================================
 \subsection{Deterministic Methods}
