@@ -9,7 +9,6 @@ Calculating the flux at some location or locations is almost always necessary wh
 
 This section describes the transport equation, the concept of adjoint transport, and two classes of methods used to solve the transport equation: deterministic methods and the Monte Carlo method.
 
-% Much of the information in sections \ref{sec:bg:rt:te} and \ref{sec:bg:rt:at} is paraphrased from the textbook by Lewis \& Miller \cite{lewis_miller}.
 Much of the information in this section is paraphrased from the textbook by Lewis \& Miller \cite{lewis_miller}.
 
 %===============================================================================
@@ -305,10 +304,10 @@ It is used for nuclear analysis and design in a wide range of applications, incl
 Users must create an input file to run MCNP.
 The input file contains the problem geometry, material assignments and definitions, source definition, and tally definitions, and may also contain numerous other parameters which alter the code's operation in some way.
 
-%-------------------------------------------------------------------------------
+%===============================================================================
 \subsection{ADVANTG}
 \label{sec:bg:rt:advantg}
-%-------------------------------------------------------------------------------
+%===============================================================================
 
 The \ac{advantg} \cite{advantg} software developed at Oak Ridge National Laboratory provides easy access to the Denovo discrete ordinates solver.
 The main purpose of ADVANTG is to generate variance reduction parameters for use in Monte Carlo simulations, but it can also be used simply to drive Denovo calculations without calculating any variance reduction parameters.

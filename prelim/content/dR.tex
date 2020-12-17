@@ -1,4 +1,97 @@
 \chapter{Perturbation in the Detector Response}
-\label{chap:dR}
+\label{chap:dr}
 
-Placeholder
+Section \ref{sec:bg:rt} introduced the transport equation and the concept of adjoint transport.
+Section \ref{sec:bg:pert} showed Greenspan's derivation of an equation for the perturbation in the detector response in operator notation.
+In this section, an equation for the perturbation in the detector response in a form suitable for use by deterministic transport codes will be derived.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Perturbed Transport Equation}
+\label{sec:dr:pte}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A perturbed version of the transport equation is derived in this section.
+
+The perturbed total cross section $\bar{\sigma}_t$, the perturbed scattering cross section $\bar{\sigma}_s$, and the angular flux in the perturbed system $\bar{\psi}$ are defined as follows:
+\begin{equation}\label{eq:dr:sigma_t_bar}
+  \bar{\sigma}_t\left(\vec{r},E\right) \equiv
+  \sigma_t      \left(\vec{r},E\right) +
+  \delta\sigma_t\left(\vec{r},E\right)
+\end{equation}
+\begin{multline}\label{eq:dr:sigma_s_bar}
+  \bar{\sigma}_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right) \equiv \\
+  \sigma_s      \left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right) +
+  \delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)
+\end{multline}
+\begin{equation}\label{eq:dr:psi_bar}
+  \bar{\psi}\left(\vec{r},\hat{\Omega},E\right) \equiv
+  \psi      \left(\vec{r},\hat{\Omega},E\right) +
+  \delta\psi\left(\vec{r},\hat{\Omega},E\right).
+\end{equation}
+
+The transport equation is repeated here:
+\begin{multline}\label{eq:dr:te}
+  \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
+  \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) = \\
+  \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime +
+  q\left(\vec{r},\hat{\Omega},E\right)
+\end{multline}
+or, in simpler terms,
+\begin{equation}\label{eq:dr:te_simple}
+  \hat{\Omega}\cdot\vec{\nabla}\psi +
+  \sigma_t\psi -
+  \iint\sigma_s\psi d\hat{\Omega}^\prime dE^\prime =
+  q.
+\end{equation}
+The transport equation in perturbed system is given by
+\begin{equation}\label{eq:dr:te_pert}
+  \hat{\Omega}\cdot\vec{\nabla}\bar{\psi} +
+  \bar{\sigma}_t\bar{\psi} -
+  \iint\bar{\sigma}_s\bar{\psi} d\hat{\Omega}^\prime dE^\prime =
+  q.
+\end{equation}
+Expanding the perturbed terms yields
+\begin{equation}\label{eq:dr:te_pert_2}
+  \hat{\Omega}\cdot\vec{\nabla}\left(\psi + \delta\psi\right) +
+  \left(\sigma_t + \delta\sigma_t\right)\left(\psi + \delta\psi\right) -
+  \iint\left(\sigma_s + \delta\sigma_s\right)\left(\psi + \delta\psi\right)d\hat{\Omega}^\prime dE^\prime =
+  q.
+\end{equation}
+Subtracting the original transport equation yields
+\begin{equation}\label{eq:dr:te_pert_3}
+  \hat{\Omega}\cdot\vec{\nabla}\delta\psi +
+  \left(\sigma_t\delta\psi + \delta\sigma_t\psi + \delta\sigma_t\delta\psi\right) - \\
+  \iint\left(\sigma_s\delta\psi + \delta\sigma_s\psi + \delta\sigma_s\delta\psi\right)d\hat{\Omega}^\prime dE^\prime =
+  0.
+\end{equation}
+In perturbation theory, it is common to discard the second-order terms.
+The result of doing so is given by
+\begin{equation}\label{eq:dr:te_pert_4}
+  \hat{\Omega}\cdot\vec{\nabla}\delta\psi +
+  \left(\sigma_t\delta\psi + \delta\sigma_t\psi\right) -
+  \iint\left(\sigma_s\delta\psi + \delta\sigma_s\psi\right)d\hat{\Omega}^\prime dE^\prime =
+  0.
+\end{equation}
+Finally, after rearranging terms, the equation becomes
+\begin{equation}\label{eq:dr:pte}
+  \hat{\Omega}\cdot\vec{\nabla}\delta\psi +
+  \sigma_t\delta\psi -
+  \iint\sigma_s\delta\psi d\hat{\Omega}^\prime dE^\prime =
+  \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime - \delta\sigma_t\psi.
+\end{equation}
+Equation \ref{eq:dr:pte} is written in operator notation as
+\begin{equation}
+  H\delta\psi = -\delta H\psi.
+\end{equation}
+
+Equation \ref{eq:dr:pte} is notable because of its similarity to the original transport equation.
+The terms on the left represent the transport operator $H$ operating on the perturbation in the flux $\delta\psi$.
+The terms on the right represent the perturbation in the transport operator $\delta H$ operating on the unperturbed flux $\psi$.
+The terms on the right can then be thought of as a ``perturbed source term.''
+
+Thus, the perturbation in the angular flux can be calculated by solving the transport equation with unperturbed cross sections and with the external source equal to $-\delta H\psi$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Calculation of $\delta R$}
+\label{sec:dr:dr}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
