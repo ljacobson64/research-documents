@@ -2,14 +2,15 @@
 \label{chap:testprob}
 
 This section describes a simple test problem which was used to calculate $\delta R$ for various perturbations.
+The results are then checked against MCNP results to verify that the method of calculating $\delta R$ is correct and that the entire process is providing useful information.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Test Problem Overview}
 \label{sec:bg:tp:overview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The test problem consists of an accelerator-based DD fusion (around 2.45 MeV) neutron source, a tally region in which it is desired to maximize the ${}^{235}\text{U}$ fission rate, a moderating region, and a steel wall to separate the moderator from the tally region.
-The goal of the test problem is to use the equation for $\delta R$ to find the moderating material that results in the highest response in the tally.
+The test problem consists of an accelerator-based DD fusion neutron (around 2.45 MeV) source, a tally region in which it is desired to maximize the ${}^{235}\text{U}$ fission rate, a moderating region, and an iron wall to separate the moderator from the tally region.
+The goal of the test problem is to use the equation for $\delta R$ to find the moderating material or materials that result in the highest response in the tally.
 Water was chosen as the baseline moderating material.
 A diagram of the test problem geometry is shown in Figure \ref{fig:testprob:material_map}.
 
@@ -187,28 +188,174 @@ Adjoint thermal neutrons radiate outward from the detector.
 \label{sec:bg:tp:dr}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Table \ref{tab:testprob:mats} shows an example table.
-%
-% \begin{table}[h]
-%   \centering
-%   \caption[Short table caption]{Long table caption}
-%   \label{tab:testprob:mats}
-%   \begin{tabular}{| c | c | c |}
-%     \hline
-%     \textbf{Material ID} & \textbf{Material} \\ \hline
-%      0 & Void                 \\ \hline
-%      1 & Air                  \\ \hline
-%      2 & Aluminum             \\ \hline
-%      3 & Beryllium            \\ \hline
-%      4 & Beryllium oxide      \\ \hline
-%      5 & Boron                \\ \hline
-%      6 & Graphite             \\ \hline
-%      7 & Copper               \\ \hline
-%      8 & Iron                 \\ \hline
-%      9 & Borated polyethylene \\ \hline
-%     10 & Polyethylene         \\ \hline
-%     11 & Heavy water          \\ \hline
-%     12 & Light water          \\ \hline
-%     13 & Uranium-235          \\ \hline
-%   \end{tabular}
-% \end{table}
+Equation \ref{eq:dr:dr_pos_final}, repeated here:
+\begin{multline*}
+  \delta R\left(\vec{r}\right) =
+  \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE - \\
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\Phi\left(\vec{r},E\right)dE,
+\end{multline*}
+was used to calculate $\delta R$ in the test problem.
+The value of $\delta R$ at point $\vec{r}_0$; i.e. $\delta R\left(\vec{r}_0\right)$, refers to the perturbation in the detector response given a perturbation in the cross sections ($\delta \sigma_t$ and $\delta \sigma_s$) that only occurs at point $\vec{r}_0$.
+The vector quantity $\delta R\left(\vec{r}\right)$ is constructed by calculating $\delta R\left(\vec{r}_0\right)$ for the entire problem domain.
+
+In the test problem, the perturbation is defined as the difference in cross sections between a new material and the existing material.
+$\delta R\left(\vec{r}\right)$ was calculated for several different materials, which are listed in Table \ref{tab:testprob:material_list}.
+
+\begin{table}[h]
+  \centering
+  \caption{List of materials considered in the test problem.}
+  \label{tab:testprob:material_list}
+  \begin{tabular}{| c | c | c |}
+    \hline
+    \textbf{Material ID} & \textbf{Material} \\ \hline
+     0 & Void                 \\ \hline
+     1 & Air                  \\ \hline
+     2 & Aluminum             \\ \hline
+     3 & Beryllium            \\ \hline
+     4 & Beryllium oxide      \\ \hline
+     5 & Boron                \\ \hline
+     6 & Graphite             \\ \hline
+     7 & Copper               \\ \hline
+     8 & Iron                 \\ \hline
+     9 & Borated polyethylene \\ \hline
+    10 & Polyethylene         \\ \hline
+    11 & Heavy water          \\ \hline
+    12 & Light water          \\ \hline
+    13 & ${}^{235}\text{U}$   \\ \hline
+  \end{tabular}
+\end{table}
+
+In all plots of $\delta R\left(\vec{r}\right)$, positive values are shown in red and negative values are shown in blue.
+A positive values of $\delta R\left(\vec{r}_0\right)$ indicates that replacing the existing material at point $\vec{r}_0$ with the new material results in an increase in the detector response.
+A negative value indicates that replacing the material results in a decrease in the detector response.
+If the existing material and the new material at a point are the same, then the value of $\delta R$ at that point will be zero.
+
+Plots of $\delta R$ for void and air are shown in Figures \ref{fig:testprob:dR_00} and \ref{fig:testprob:dR_01}.
+The plot of $\delta R$ for void shows that replacing any material at any location in the problem with void results in a decrease in the detector response.
+This is an expected result because removing material results in a decrease in thermalization.
+The plot of $\delta R$ for air is similar to the plot for void, showing that replacing any material with air results in a decrease in the detector response.
+It does show that replacing the void regions (white regions in Figure \ref{fig:testprob:material_map}) with air results in a a slight increase in the detector response.
+This is also an expected result because any amount of scattering, even the minute amount that would occur in air, is better than no scattering at all.
+
+\begin{figure}
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_00.png}
+    \caption{$\delta R$ for void.}
+    \label{fig:testprob:dR_00}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_01.png}
+    \caption{$\delta R$ for air.}
+    \label{fig:testprob:dR_01}
+  \end{minipage}
+\end{figure}
+
+Analysis for all subsequent plots will only focus on the moderating region (light blue region in \ref{fig:testprob:material_map}) because the goal of the test problem is to construct the optimal moderator.
+
+Plots of $\delta R$ for beryllium oxide (BeO) and graphite are shown in Figures \ref{fig:testprob:dR_04} and \ref{fig:testprob:dR_06}.
+Both plots show that the detector response decreases if the material between the source and detector (the baseline is water) is replaced with the new material.
+This implies that water is superior to both BeO and graphite in that region for the purposes of this problem.
+There are regions in the water behind the source and far from the detector where $\delta R$ for BeO is slightly positive, however.
+This indicates that the optimal moderator geometry would consist of two or more materials.
+
+\begin{figure}
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_04.png}
+    \caption{$\delta R$ for beryllium oxide.}
+    \label{fig:testprob:dR_04}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_06.png}
+    \caption{$\delta R$ for graphite.}
+    \label{fig:testprob:dR_06}
+  \end{minipage}
+\end{figure}
+
+Plots of $\delta R$ for water and heavy water are shown in Figures \ref{fig:testprob:dR_12} and \ref{fig:testprob:dR_11}.
+Understandably, the plot for water does not provide any useful information: all it shows is that replacing water with itself does not change the detector response.
+The plot for heavy water shows that it is worse than water at every location in the moderator.
+This makes sense because more scattering events are required to thermalize neutrons with deuterium than are required with regular hydrogen.
+
+\begin{figure}
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_12.png}
+    \caption{$\delta R$ for water.}
+    \label{fig:testprob:dR_12}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_11.png}
+    \caption{$\delta R$ for heavy water.}
+    \label{fig:testprob:dR_11}
+  \end{minipage}
+\end{figure}
+
+Plots of $\delta R$ for polyethylene (HDPE) and borated HDPE are shown in Figures \ref{fig:testprob:dR_10} and \ref{fig:testprob:dR_09}.
+These plots show that both materials are superior to water at every location in the moderator.
+The HDPE result makes sense because HDPE has a higher hydrogen density than water, meaning it can thermalize neutrons in shorter distances.
+The borated HDPE result does not make much sense because boron has an extremely high absorption cross section for thermal neutrons, which intuitively should result in a decrease in the detector response.
+More analysis is needed on this subject.
+
+\begin{figure}
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_10.png}
+    \caption{$\delta R$ for polyethylene.}
+    \label{fig:testprob:dR_10}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_09.png}
+    \caption{$\delta R$ for borated polyethylene.}
+    \label{fig:testprob:dR_09}
+  \end{minipage}
+\end{figure}
+
+Plots of $\delta R$ for aluminum, iron, boron, and ${}^{235}\text{U}$ are shown in Figures \ref{fig:testprob:dR_02}, \ref{fig:testprob:dR_08}, \ref{fig:testprob:dR_05}, and \ref{fig:testprob:dR_13}, respectively.
+The plots show that all four materials perform considerably worse than water throughout the moderator, which makes sense because none of these materials are considered to be effective moderators.
+The plot for ${}^{235}\text{U}$ does showcase one of the limitations of this approach: neutron multiplication due to fission is not taken into account.
+
+\begin{figure}
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_02.png}
+    \caption{$\delta R$ for aluminum.}
+    \label{fig:testprob:dR_02}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_08.png}
+    \caption{$\delta R$ for iron.}
+    \label{fig:testprob:dR_08}
+  \end{minipage}
+\end{figure}
+\begin{figure}
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_05.png}
+    \caption{$\delta R$ for boron.}
+    \label{fig:testprob:dR_05}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{content/testprob/dR_13.png}
+    \caption{$\delta R$ for ${}^{235}\text{U}$.}
+    \label{fig:testprob:dR_13}
+  \end{minipage}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{MCNP Validation}
+\label{sec:bg:tp:mcnp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
