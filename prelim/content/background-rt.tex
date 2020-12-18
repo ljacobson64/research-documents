@@ -211,12 +211,12 @@ Regions with the highest contributon flux can be thought of as being the most im
 The angular contributon flux $\Psi$ is defined simply as the product of the forward and adjoint angular fluxes:
 \begin{equation}\label{eq:bg:rt:angular-contributon}
   \Psi\left(\vec{r},\hat{\Omega},E\right) \equiv
-  \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right).
+  \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right).
 \end{equation}
 The scalar contributon flux $\Phi$ is obtained by integrating the angular contribution flux over angle:
-\begin{equation}\label{eq:bg:rt:angular-contributon}
+\begin{equation}\label{eq:bg:rt:scalar-contributon}
   \Phi\left(\vec{r},E\right) \equiv
-  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}.
+  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
 Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes.
 It is important to calculate the scalar contributon flux by first multiplying the forward and angular fluxes and then integrating over energy, not the other way around.

@@ -95,3 +95,78 @@ Thus, the perturbation in the angular flux can be calculated by solving the tran
 \section{Calculation of $\delta R$}
 \label{sec:dr:dr}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Equation \ref{eq:bg:pt:green170a}, which is repeated here as
+\begin{equation}\label{eq:dr:dr_operator}
+  \delta R = \left<\psi^+,-\delta H\psi\right>,
+\end{equation}
+is an equation for the perturbation in the detector response.
+The $\left<\right>$ notation indicates integration over all dependent variables ($\vec{r}$, $\hat{\Omega}$, and $E$), which means that $\delta R$ is a scalar.
+
+However, it is useful to consider the a modified version of the equation where integration is only performed over $\hat{\Omega}$ and $E$; i.e.
+\begin{equation}\label{eq:dr:dr_pos}
+  \delta R\left(\vec{r}\right) =
+  -\int_{4\pi}\int_0^\infty\psi^+\delta H\psi dEd\hat{\Omega}.
+\end{equation}
+This results in $\delta R$ being a function of position.
+$\delta R\left(\vec{r}\right)$ is defined as the perturbation in the detector response given a perturbation in cross sections ($\delta H$) that only occurs at point $\vec{r}$.
+
+Expanding the operator notation yields
+\begin{multline}\label{eq:dr:dr_pos_expand}
+  \delta R\left(\vec{r}\right) =
+  \int_{4\pi}\int_0^\infty\Biggl(\psi^+\left(\vec{r},\hat{\Omega},E\right) \times \\
+  \Biggl(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime - \\
+  \delta\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)\Biggr)\Biggr)dEd\hat{\Omega},
+\end{multline}
+which is unwieldy.
+It can be broken up into total and scattering terms:
+\begin{equation}\label{eq:dr:dr_terms}
+  \delta R\left(\vec{r}\right) =
+  \delta R_s\left(\vec{r}\right) -
+  \delta R_t\left(\vec{r}\right).
+\end{equation}
+
+The total term $\delta R_t$ is given by
+\begin{equation}\label{eq:dr:dr_t_term_1}
+  \delta R_t\left(\vec{r}\right) =
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},\hat{\Omega},E\right)\delta\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}.
+\end{equation}
+It can be simplified because $\delta\sigma_t$ has no angular dependence:
+\begin{equation}\label{eq:dr:dr_t_term_2}
+  \delta R_t\left(\vec{r}\right) =
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}dE.
+\end{equation}
+The final form of the equation for the total term results from the definition of the scalar contributon flux (Equation \ref{eq:bg:rt:scalar-contributon}):
+\begin{equation}\label{eq:dr:dr_t_term}
+  \delta R_t\left(\vec{r}\right) =
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\Phi\left(\vec{r},E\right)dE.
+\end{equation}
+
+The scattering term $\delta R_s$ is given by
+\begin{multline}\label{eq:dr:dr_s_term_1}
+  \delta R_s\left(\vec{r}\right) =
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},\hat{\Omega},E\right) \times \\
+  \left(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime\right)dEd\hat{\Omega}.
+\end{multline}
+If isotropic scattering is assumed, then the equation becomes
+\begin{multline}\label{eq:dr:dr_s_term_2}
+  \delta R_s\left(\vec{r}\right) =
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},\hat{\Omega},E\right) \times \\
+  \left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime\right)dEd\hat{\Omega}.
+\end{multline}
+The final form of the equation for the total term results from the definition of the scalar flux (Equation \ref{eq:bg:rt:scalar-flux}):
+\begin{equation}\label{eq:dr:dr_s_term}
+  \delta R_s\left(\vec{r}\right) =
+  \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE.
+\end{equation}
+
+Bringing the terms together yields the final equation for $\delta R\left(\vec{r}\right)$:
+
+\begin{empheq}[box=\fbox]{multline}\label{eq:dr:dr_pos_final}
+  \delta R\left(\vec{r}\right) =
+  \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE - \\
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\Phi\left(\vec{r},E\right)dE.
+\end{empheq}
+
+Equation \ref{eq:dr:dr_pos_final} implies something profound: if $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated for any perturbations $\sigma_t$ and $\sigma_s$.
+Thus, $\psi$ and $\psi^+$ only need to be calculated a single time in order to calculate the effects of making any perturbation anywhere in the geometry.
