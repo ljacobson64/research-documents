@@ -208,15 +208,16 @@ The forward flux is highest near the source, while the adjoint flux is highest n
 The contributon flux is highest along the path between the source and detector.
 Regions with the highest contributon flux can be thought of as being the most important regions in the problem because they have the highest likelihood of containing particles that were both emitted by the source and that will contribute to the detector response.
 
-The angular contributon flux $\Psi$ is defined simply as the product of the forward and adjoint angular fluxes:
+The angular contributon flux $\Psi$ is defined as the product of the forward and adjoint angular fluxes, with the directionality of the adjoint flux reversed:
 \begin{equation}\label{eq:bg:rt:angular-contributon}
   \Psi\left(\vec{r},\hat{\Omega},E\right) \equiv
-  \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right).
+  \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right).
 \end{equation}
+The reason the directionality of the adjoint flux must be reversed is that adjoint particles that are likely to have been emitted by the source travel in the opposite direction of forward particles that are likely to contribute to the detector.
 The scalar contributon flux $\Phi$ is obtained by integrating the angular contribution flux over angle:
 \begin{equation}\label{eq:bg:rt:scalar-contributon}
   \Phi\left(\vec{r},E\right) \equiv
-  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}.
+  \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
 Note that this is not the same quantity as the product of the forward and adjoint scalar fluxes.
 It is important to calculate the scalar contributon flux by first multiplying the forward and angular fluxes and then integrating over energy, not the other way around.

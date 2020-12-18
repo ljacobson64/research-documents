@@ -114,7 +114,7 @@ $\delta R\left(\vec{r}\right)$ is defined as the perturbation in the detector re
 Expanding the operator notation yields
 \begin{multline}\label{eq:dr:dr_pos_expand}
   \delta R\left(\vec{r}\right) =
-  \int_{4\pi}\int_0^\infty\Biggl(\psi^+\left(\vec{r},\hat{\Omega},E\right) \times \\
+  \int_{4\pi}\int_0^\infty\Biggl(\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \Biggl(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime - \\
   \delta\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)\Biggr)\Biggr)dEd\hat{\Omega},
 \end{multline}
@@ -129,12 +129,12 @@ It can be broken up into total and scattering terms:
 The total term $\delta R_t$ is given by
 \begin{equation}\label{eq:dr:dr_t_term_1}
   \delta R_t\left(\vec{r}\right) =
-  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},\hat{\Omega},E\right)\delta\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}.
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right)\delta\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}.
 \end{equation}
 It can be simplified because $\delta\sigma_t$ has no angular dependence:
 \begin{equation}\label{eq:dr:dr_t_term_2}
   \delta R_t\left(\vec{r}\right) =
-  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}dE.
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}dE.
 \end{equation}
 The final form of the equation for the total term results from the definition of the scalar contributon flux (Equation \ref{eq:bg:rt:scalar-contributon}):
 \begin{equation}\label{eq:dr:dr_t_term}
@@ -145,13 +145,13 @@ The final form of the equation for the total term results from the definition of
 The scattering term $\delta R_s$ is given by
 \begin{multline}\label{eq:dr:dr_s_term_1}
   \delta R_s\left(\vec{r}\right) =
-  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},\hat{\Omega},E\right) \times \\
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \left(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime\right)dEd\hat{\Omega}.
 \end{multline}
 If isotropic scattering is assumed, then the equation becomes
 \begin{multline}\label{eq:dr:dr_s_term_2}
   \delta R_s\left(\vec{r}\right) =
-  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},\hat{\Omega},E\right) \times \\
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime\right)dEd\hat{\Omega}.
 \end{multline}
 The final form of the equation for the total term results from the definition of the scalar flux (Equation \ref{eq:bg:rt:scalar-flux}):
@@ -170,3 +170,35 @@ Bringing the terms together yields the final equation for $\delta R\left(\vec{r}
 
 Equation \ref{eq:dr:dr_pos_final} implies something profound: if $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated for any perturbations $\sigma_t$ and $\sigma_s$.
 Thus, $\psi$ and $\psi^+$ only need to be calculated a single time in order to calculate the effects of making any perturbation anywhere in the geometry.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementation}
+\label{sec:dr:implementation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+As was mentioned in Section \ref{sec:bg:rt:advantg}, ADVANTG can be configured to write the full forward and adjoint angular flux data to an HDF5 file via an undocumented feature.
+However, additional data that is not possible to access via standard features is required in order to calculate $\delta R$.
+Thus, ADVANTG's Python source code was modified to instruct it to write out the additional data to NumPy \cite{numpy} pickle files.
+A list of all the data written out by ADVANTG after the source code modifications is as follows:
+
+\begin{enumerate}
+  \item Spatial mesh (x, y, and z)
+  \item Energy groups (neutron and gamma)
+  \item Quadrature weights used by the discrete ordinates solver
+  \item Source locations (indices of the voxels that contain the source)
+  \item Source strengths (for each source location)
+  \item Source energy spectrum
+  \item Response locations (indices of the voxels that contain the response)
+  \item Response strengths (for each response location)
+  \item Response energy spectrum
+  \item Mix table (all material definitions, including mixed materials for voxels which contain multiple materials)
+  \item Material map (shows which material is present in each voxel)
+  \item Total cross section (for every material)
+  \item Scattering cross section (for every material)
+  \item Angular forward flux
+  \item Angular adjoint flux
+\end{enumerate}
+
+C++ code was written to load the data and calculate $\delta R$.
+(Python was tried first, but it was found to be far too slow.)
+The CNPy \cite{cnpy} library was used to allow the C++ code to write the data as pickle files to allow for post-processing in Python.
