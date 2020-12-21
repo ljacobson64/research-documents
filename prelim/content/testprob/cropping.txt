@@ -1,0 +1,4 @@
+Material map: left  70, right  90, top 50, bottom 20
+Spectra:      left  30, right  70, top 50, bottom 20
+Colormap:     left  70, right 100, top 50, bottom 20
+Current:      left 110, right 150, top 50, bottom 20
