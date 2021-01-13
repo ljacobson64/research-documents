@@ -30,35 +30,35 @@ The perturbed total cross section $\bar{\sigma}_t$, the perturbed scattering cro
 \end{equation}
 
 The transport equation is repeated here:
-\begin{multline}\label{eq:dr:te}
+\begin{multline*}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) = \\
   \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime +
   q\left(\vec{r},\hat{\Omega},E\right)
-\end{multline}
+\end{multline*}
 or, in simpler terms,
-\begin{equation}\label{eq:dr:te_simple}
+\begin{equation}\label{eq:dr:transport_equation_simple}
   \hat{\Omega}\cdot\vec{\nabla}\psi +
   \sigma_t\psi -
   \iint\sigma_s\psi d\hat{\Omega}^\prime dE^\prime =
   q.
 \end{equation}
 The transport equation in perturbed system is given by
-\begin{equation}\label{eq:dr:te_pert}
+\begin{equation}\label{eq:dr:transport_equation_perturbed}
   \hat{\Omega}\cdot\vec{\nabla}\bar{\psi} +
   \bar{\sigma}_t\bar{\psi} -
   \iint\bar{\sigma}_s\bar{\psi} d\hat{\Omega}^\prime dE^\prime =
   q.
 \end{equation}
 Expanding the perturbed terms yields
-\begin{equation}\label{eq:dr:te_pert_2}
+\begin{equation}\label{eq:dr:transport_equation_perturbed_2}
   \hat{\Omega}\cdot\vec{\nabla}\left(\psi + \delta\psi\right) +
   \left(\sigma_t + \delta\sigma_t\right)\left(\psi + \delta\psi\right) -
   \iint\left(\sigma_s + \delta\sigma_s\right)\left(\psi + \delta\psi\right)d\hat{\Omega}^\prime dE^\prime =
   q.
 \end{equation}
 Subtracting the original transport equation yields
-\begin{equation}\label{eq:dr:te_pert_3}
+\begin{equation}\label{eq:dr:transport_equation_perturbed_3}
   \hat{\Omega}\cdot\vec{\nabla}\delta\psi +
   \left(\sigma_t\delta\psi + \delta\sigma_t\psi + \delta\sigma_t\delta\psi\right) - \\
   \iint\left(\sigma_s\delta\psi + \delta\sigma_s\psi + \delta\sigma_s\delta\psi\right)d\hat{\Omega}^\prime dE^\prime =
@@ -66,25 +66,25 @@ Subtracting the original transport equation yields
 \end{equation}
 In perturbation theory, it is common to discard the second-order terms.
 The result of doing so is given by
-\begin{equation}\label{eq:dr:te_pert_4}
+\begin{equation}\label{eq:dr:transport_equation_perturbed_4}
   \hat{\Omega}\cdot\vec{\nabla}\delta\psi +
   \left(\sigma_t\delta\psi + \delta\sigma_t\psi\right) -
   \iint\left(\sigma_s\delta\psi + \delta\sigma_s\psi\right)d\hat{\Omega}^\prime dE^\prime =
   0.
 \end{equation}
 Finally, after rearranging terms, the equation becomes
-\begin{equation}\label{eq:dr:pte}
+\begin{equation}\label{eq:dr:perturbed_transport_equation}
   \hat{\Omega}\cdot\vec{\nabla}\delta\psi +
   \sigma_t\delta\psi -
   \iint\sigma_s\delta\psi d\hat{\Omega}^\prime dE^\prime =
   \iint\delta\sigma_s\psi d\hat{\Omega}^\prime dE^\prime - \delta\sigma_t\psi.
 \end{equation}
-Equation \ref{eq:dr:pte} is written in operator notation as
+Equation \ref{eq:dr:perturbed_transport_equation} is written in operator notation as
 \begin{equation}
   H\delta\psi = -\delta H\psi.
 \end{equation}
 
-Equation \ref{eq:dr:pte} is notable because of its similarity to the original transport equation.
+Equation \ref{eq:dr:perturbed_transport_equation} is notable because of its similarity to the original transport equation.
 The terms on the left represent the transport operator $H$ operating on the perturbation in the flux $\delta\psi$.
 The terms on the right represent the perturbation in the transport operator $\delta H$ operating on the unperturbed flux $\psi$.
 The terms on the right can then be thought of as a ``perturbed source term.''
@@ -97,14 +97,14 @@ Thus, the perturbation in the angular flux can be calculated by solving the tran
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Equation \ref{eq:bg:pt:green170a}, which is repeated here as
-\begin{equation}\label{eq:dr:dr_operator}
+\begin{equation*}
   \delta R = \left<\psi^+,-\delta H\psi\right>,
-\end{equation}
+\end{equation*}
 is an equation for the perturbation in the detector response.
 The $\left<\right>$ notation indicates integration over all dependent variables ($\vec{r}$, $\hat{\Omega}$, and $E$), which means that $\delta R$ is a scalar.
 
 However, it is useful to consider the a modified version of the equation where integration is only performed over $\hat{\Omega}$ and $E$; i.e.
-\begin{equation}\label{eq:dr:dr_pos}
+\begin{equation}\label{eq:dr:dr_function_of_position}
   \delta R\left(\vec{r}\right) =
   -\int_{4\pi}\int_0^\infty\psi^+\delta H\psi dEd\hat{\Omega}.
 \end{equation}
@@ -113,7 +113,7 @@ $\delta R\left(\vec{r}_0\right)$ is defined as the perturbation in the detector 
 The vector quantity $\delta R\left(\vec{r}\right)$ is constructed by calculating $\delta R\left(\vec{r}_0\right)$ for all values of $\vec{r}_0$.
 
 Expanding the operator notation yields
-\begin{multline}\label{eq:dr:dr_pos_expand}
+\begin{multline}\label{eq:dr:dr_function_of_position_expanded}
   \delta R\left(\vec{r}\right) =
   \int_{4\pi}\int_0^\infty\Biggl(\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \Biggl(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime - \\
@@ -128,48 +128,48 @@ It can be broken up into total and scattering terms:
 \end{equation}
 
 The total term $\delta R_t$ is given by
-\begin{equation}\label{eq:dr:dr_t_term_1}
+\begin{equation}\label{eq:dr:dr_total_term_1}
   \delta R_t\left(\vec{r}\right) =
   \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right)\delta\sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}.
 \end{equation}
 It can be simplified because $\delta\sigma_t$ has no angular dependence:
-\begin{equation}\label{eq:dr:dr_t_term_2}
+\begin{equation}\label{eq:dr:dr_total_term_2}
   \delta R_t\left(\vec{r}\right) =
   \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}dE.
 \end{equation}
-The final form of the equation for the total term results from the definition of the scalar contributon flux (Equation \ref{eq:bg:rt:scalar-contributon}):
-\begin{equation}\label{eq:dr:dr_t_term}
+The final form of the equation for the total term results from the definition of the scalar contributon flux (Equation \ref{eq:bg:rt:scalar_contributon}):
+\begin{equation}\label{eq:dr:dr_total_term}
   \delta R_t\left(\vec{r}\right) =
   \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\Phi\left(\vec{r},E\right)dE.
 \end{equation}
 
 The scattering term $\delta R_s$ is given by
-\begin{multline}\label{eq:dr:dr_s_term_1}
+\begin{multline}\label{eq:dr:dr_scattering_term_1}
   \delta R_s\left(\vec{r}\right) =
   \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \left(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime\right)dEd\hat{\Omega}.
 \end{multline}
 If isotropic scattering is assumed, then the equation becomes
-\begin{multline}\label{eq:dr:dr_s_term_2}
+\begin{multline}\label{eq:dr:dr_scattering_term_2}
   \delta R_s\left(\vec{r}\right) =
   \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)d\hat{\Omega}^\prime dE^\prime\right)dEd\hat{\Omega}.
 \end{multline}
-The final form of the equation for the total term results from the definition of the scalar flux (Equation \ref{eq:bg:rt:scalar-flux}):
-\begin{equation}\label{eq:dr:dr_s_term}
+The final form of the equation for the total term results from the definition of the scalar flux (Equation \ref{eq:bg:rt:scalar_flux}):
+\begin{equation}\label{eq:dr:dr_scattering_term}
   \delta R_s\left(\vec{r}\right) =
   \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE.
 \end{equation}
 
 Bringing the terms together yields the final equation for $\delta R\left(\vec{r}\right)$:
 
-\begin{empheq}[box=\fbox]{multline}\label{eq:dr:dr_pos_final}
+\begin{empheq}[box=\fbox]{multline}\label{eq:dr:dr_function_of_position_final}
   \delta R\left(\vec{r}\right) =
   \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE - \\
   \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\Phi\left(\vec{r},E\right)dE.
 \end{empheq}
 
-Equation \ref{eq:dr:dr_pos_final} implies something profound: if $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated for any perturbations $\sigma_t$ and $\sigma_s$.
+Equation \ref{eq:dr:dr_function_of_position_final} implies something profound: if $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated for any perturbations $\sigma_t$ and $\sigma_s$.
 Thus, $\psi$ and $\psi^+$ only need to be calculated a single time in order to calculate the effects of making any perturbation anywhere in the geometry.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

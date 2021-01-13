@@ -2,13 +2,13 @@
 \label{chap:intro}
 
 When analyzing nuclear systems such as fission reactors, fission reactors, and accelerators, it is usually necessary to use a Monte Carlo code like MCNP \cite{mcnp620} to predict system performance.
-The Monte Carlo method is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
-It allows for detailed representations of geometry and continuous energy and angle space.
+Monte Carlo codes use the Monte Carlo method, which is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
+The method allows for detailed representations of geometry and continuous energy and angle space.
 However, it is quite computationally expensive because many particles may need to be simulated in order to achieve reliable results.
 Thus, it can take a long time (computer years in the most complicated systems) in order to obtain results.
 These computing requirements are usually managed by utilizing the resources of a computer cluster.
 
-Another class of radiation transport methods are known as deterministic methods.
+Another class of radiation transport methods is known as deterministic methods.
 Deterministic solvers like Denovo \cite{denovo} solve the transport equation directly, and they generally produce detailed solutions throughout the entire phase space (space, angle, and energy) of a problem.
 However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainties in the results.
 Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
@@ -23,14 +23,14 @@ These parametric studies can take an enormous amount of computational resources,
 
 The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization.
 The way this is done is by applying perturbation theory to the forward and adjoint transport equations to obtain perturbed versions of the transport equations.
-The perturbed transport equations can be used to calculate the change in some response $\delta R$ due to some change in cross sections $\delta\sigma$ at some location $\left(\vec{r}\right)$.
+The perturbed transport equations can be used to calculate the change in some response $\delta R$ due to some change in cross sections $\delta\sigma$ at some location $\vec{r}$.
 Fundamental to this methodology is that once the forward and adjoint angular fluxes are known throughout the problem domain, the results of many different perturbations can be calculated all at once, without needing to recalculate the angular flux for each perturbation.
 Thus, a significant amount of insight into possible design improvements can be obtained from a single deterministic forward and adjoint solution.
 
 Here follows the layout of this document.
 Chapter \ref{chap:bg} first provides relevant background on radiation transport, perturbation theory as it applies to radiation transport, and shape optimization methods.
-Chapter \ref{chap:dR} provides the mathematical basis for the geometry optimization method and describes how it can be utilized using available software packages.
-Chapter \ref{chap:tp} introduces a simple test problem and shows the results of the optimization method.
+Chapter \ref{chap:dr} provides the mathematical basis for the geometry optimization method and describes how it can be utilized using available software packages.
+Chapter \ref{chap:testprob} introduces a simple test problem and shows the results of the optimization method.
 Lastly, Chapter \ref{chap:proposal} is the proposal for the additional work that will be done in order to complete the final dissertation.
 
 % Automated deterministic nuclear system optimizer

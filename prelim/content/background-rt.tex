@@ -31,29 +31,29 @@ The particle density distribution $N\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\
 
 The particle density distribution is rarely directly considered in transport calculations, however.
 The most common quantity considered is the \textit{angular flux}:
-\begin{equation}\label{eq:bg:rt:angular-flux}
+\begin{equation}\label{eq:bg:rt:angular_flux}
   \psi\left(\vec{r},\hat{\Omega},E\right) \equiv vN\left(\vec{r},\hat{\Omega},E\right)
 \end{equation}
 where $v$ is the particle speed.
 
 It is sometimes useful to consider the flux independent of angle.
 In these cases, the \textit{scalar flux} may be considered:
-\begin{equation}\label{eq:bg:rt:scalar-flux}
+\begin{equation}\label{eq:bg:rt:scalar_flux}
   \phi\left(\vec{r},E\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
 
 The \textit{current vector}, which is a measure of the directionality of particles, is defined as
-\begin{equation}\label{eq:bg:rt:current-vector}
+\begin{equation}\label{eq:bg:rt:current_vector}
   \vec{J}\left(\vec{r},E\right) \equiv \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega} d\hat{\Omega}.
 \end{equation}
 
 The \textit{reaction rate} for reactions of type $x$ is
-\begin{equation}\label{eq:bg:rt:rxn-rate-angular}
+\begin{equation}\label{eq:bg:rt:rxn_rate_angular}
   R = \int_V\int_{4\pi}\int_0^\infty\sigma_x\left(\vec{r},\hat{\Omega},E\right)\psi\left(\vec{r},\hat{\Omega},E\right)dEd\hat{\Omega}dV
 \end{equation}
 where $\sigma_x$ is the cross section for reaction $x$.
 Cross sections are almost always independent of the particle direction, so the reaction rate equation can be simplified as
-\begin{equation}\label{eq:bg:rt:rxn-rate-scalar}
+\begin{equation}\label{eq:bg:rt:rxn_rate_scalar}
   R = \int_V\int_0^\infty\sigma_x\left(\vec{r},E\right)\phi\left(\vec{r},E\right)dEdV.
 \end{equation}
 
@@ -73,7 +73,7 @@ There are three such mechanisms:
 \end{enumerate}
 
 The time-independent transport equation is a balance between these three processes, and it is given by
-\begin{equation}\label{eq:bg:rt:transport-totsrc}
+\begin{equation}\label{eq:bg:rt:transport_equation_total_source_term}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) =
   q\left(\vec{r},\hat{\Omega},E\right).
@@ -86,7 +86,7 @@ The time-independent transport equation is a balance between these three process
 
 The source term $q\left(\vec{r},\hat{\Omega},E\right)$ includes contributions from three sources: external sources, scattering, and fission.
 It can be represented as a sum of these three contributions:
-\begin{equation}\label{eq:bg:rt:source}
+\begin{equation}\label{eq:bg:rt:source_term_contributions}
   q = q_{ex} + q_s + q_f.
 \end{equation}
 
@@ -96,7 +96,7 @@ External sources are represented as a known distribution $q_{ex}\left(\vec{r},\h
 Scattering sources are the result of particles scattering from one angle and energy to another.
 Particles at the original angle and energy are removed from the system while particles at the new angle and energy are born.
 The source due to scattering is given by the scattering term:
-\begin{equation}\label{eq:bg:rt:scattering-term}
+\begin{equation}\label{eq:bg:rt:source_scattering_term}
   q_s\left(\vec{r},\hat{\Omega},E\right) \equiv
   \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime
 \end{equation}
@@ -106,7 +106,7 @@ Fission sources only occur if a multiplying medium exists in the system.
 Fission sources will not be considered in this work.
 
 Separating the total source term in the time-independent transport equation into its external and scattering components yields
-\begin{multline}\label{eq:bg:rt:transport}
+\begin{multline}\label{eq:bg:rt:transport_equation}
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) = \\
   \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime +
@@ -120,14 +120,14 @@ Separating the total source term in the time-independent transport equation into
 
 It is often useful to write the transport equation in operator notation.
 In this case, the time-independent \textit{transport operator} $H$ operates on the angular flux $\psi$ and is given by
-\begin{multline}\label{eq:bg:rt:transport-operator}
+\begin{multline}\label{eq:bg:rt:transport_operator}
   H\psi \equiv
   \hat{\Omega}\cdot\vec{\nabla}\psi\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi\left(\vec{r},\hat{\Omega},E\right) - \\
   \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime.
 \end{multline}
 The transport equation in operator notation is then simply
-\begin{equation}\label{eq:bg:rt:transport-opnot}
+\begin{equation}\label{eq:bg:rt:transport_equation_operator_notation}
   H\psi = q.
 \end{equation}
 
@@ -137,7 +137,7 @@ The transport equation in operator notation is then simply
 %===============================================================================
 
 Given an operator $H$ and the functions $\zeta$ and $\zeta^+$, the adjoint operator $H^+$ is defined by the \textit{adjoint identity}
-\begin{equation}\label{eq:bg:rt:adjoint-identity}
+\begin{equation}\label{eq:bg:rt:adjoint_identity}
   \left<\zeta^+,H\zeta\right> =
   \left<\zeta,H^+\zeta^+\right>,
 \end{equation}
@@ -146,7 +146,7 @@ where $\left<\right>$ denotes integration over all independent variables.
 It is often useful to consider adjoint transport, as distinct from forward (regular) transport.
 An adjoint transport operator $H^+$ exists which satisfies the adjoint identity and operates on the \textit{adjoint flux} $\psi^+$.
 The adjoint transport equation in operator notation is
-\begin{equation}\label{eq:bg:rt:adjtransport-opnot}
+\begin{equation}\label{eq:bg:rt:adjoint_transport_equation_operator_notation}
   H^+\psi^+ = q^+,
 \end{equation}
 where $q^+$ is the adjoint source.
@@ -161,7 +161,7 @@ There is an important physical interpretation of the adjoint flux: the adjoint f
 In other words, the adjoint flux at some location $\vec{r}_0, \hat{\Omega}_0, E_0$ indicates how much a source at that location would contribute to the detector response.
 
 The time-independent adjoint operator $H^+$ operates on the adjoint angular flux $\psi^+$ and is given by
-\begin{multline}\label{eq:bg:rt:transport-operator}
+\begin{multline}\label{eq:bg:rt:adjoint_transport_operator}
   H^+\psi^+ \equiv
   -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) - \\
@@ -169,7 +169,7 @@ The time-independent adjoint operator $H^+$ operates on the adjoint angular flux
 \end{multline}
 
 After expanding the adjoint transport operator, the adjoint transport equation is given by
-\begin{multline}\label{eq:bg:rt:adjoint-transport}
+\begin{multline}\label{eq:bg:rt:adjoint_transport_equation}
   -\hat{\Omega}\cdot\vec{\nabla}\psi^+\left(\vec{r},\hat{\Omega},E\right) +
   \sigma_t\left(\vec{r},E\right)\psi^+\left(\vec{r},\hat{\Omega},E\right) = \\
   \int_{4\pi}\int_0^\infty\sigma_s\left(\vec{r},\hat{\Omega}\rightarrow\hat{\Omega}^\prime,E\rightarrow E^\prime\right)\psi^+\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime +
@@ -177,19 +177,19 @@ After expanding the adjoint transport operator, the adjoint transport equation i
 \end{multline}
 
 The detector response $R$ can be calculated in two ways:
-\begin{equation}\label{eq:bg:rt:detector-response}
+\begin{equation}\label{eq:bg:rt:detector_response}
   R = \left<\psi,q^+\right>
     = \left<\psi^+,q\right>.
 \end{equation}
 
 Several important particle distributions that exist in forward transport also exist in adjoint transport.
 The adjoint scalar flux is defined as
-\begin{equation}\label{eq:bg:rt:scalar-flux}
+\begin{equation}\label{eq:bg:rt:adjoint_scalar_flux}
   \phi^+\left(\vec{r},E\right) \equiv
   \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)d\hat{\Omega}
 \end{equation}
 and the adjoint current vector is defined as
-\begin{equation}\label{eq:bg:rt:current-vector}
+\begin{equation}\label{eq:bg:rt:adjoint_current_vector}
   \vec{J}^+\left(\vec{r},E\right) \equiv
   \int_{4\pi}\psi^+\left(\vec{r},\hat{\Omega},E\right)\hat{\Omega} d\hat{\Omega}.
 \end{equation}
@@ -209,13 +209,13 @@ The contributon flux is highest along the path between the source and detector.
 Regions with the highest contributon flux can be thought of as being the most important regions in the problem because they have the highest likelihood of containing particles that were both emitted by the source and that will contribute to the detector response.
 
 The angular contributon flux $\Psi$ is defined as the product of the forward and adjoint angular fluxes, with the directionality of the adjoint flux reversed:
-\begin{equation}\label{eq:bg:rt:angular-contributon}
+\begin{equation}\label{eq:bg:rt:angular_contributon}
   \Psi\left(\vec{r},\hat{\Omega},E\right) \equiv
   \psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right).
 \end{equation}
 The reason the directionality of the adjoint flux must be reversed is that adjoint particles that are likely to have been emitted by the source travel in the opposite direction of forward particles that are likely to contribute to the detector.
 The scalar contributon flux $\Phi$ is obtained by integrating the angular contribution flux over angle:
-\begin{equation}\label{eq:bg:rt:scalar-contributon}
+\begin{equation}\label{eq:bg:rt:scalar_contributon}
   \Phi\left(\vec{r},E\right) \equiv
   \int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}.
 \end{equation}
