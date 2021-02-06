@@ -19,7 +19,6 @@ The optimization capabilities of Dakota are used in this work.
 Words in \textit{italics} are technical terms that are used used to describe various properties of optimization problems and solution methods.
 
 The mathematical formulation of a general optimization problem is as follows:
-
 \begin{equation}\begin{split}\label{eq:bg:opt:optimization_problem}
   \mbox{minimize:}  \quad & f\left(\textbf{x}\right) \\
                           & \textbf{x} \in \mathbb{R}^n \\
@@ -29,12 +28,11 @@ The mathematical formulation of a general optimization problem is as follows:
                           & \textbf{A}_e\textbf{x} = \textbf{a}_t \\
                           & \textbf{x}_L \leq \textbf{x} \leq \textbf{x}_U
 \end{split}\end{equation}
-
 where vector and matrix terms are shown in bold.
 
 In this formulation, $\textbf{x}$ is an n-dimensional real-valued vector of \textit{design variables} or \textit{design parameters}.
 The design variables are the variables that the optimization algorithm is allowed to change during its process of searching for the optimal solution.
-Constraints may be placed on $\textbf{x}$ in the form of lower bounds $\textbf{x}_L$ and upper bounds $\textbf{x}_R$.
+Constraints may be placed on $\textbf{x}$ in the form of lower bounds $\textbf{x}_L$ and upper bounds $\textbf{x}_U$.
 These constraints define the allowable values of $\textbf{x}$.
 The set of all allowable values of $\textbf{x}$ is known as the \textit{design space} or the \textit{parameter space}.
 Any particular set of values within the parameter space is known as a \textit{design point} or a \textit{sample point}.
@@ -57,7 +55,7 @@ Inequality constraints are said to be "two-sided" because they contain both lowe
 The \textit{linear equality constraints} create a linear system $\textbf{A}_e\textbf{x}$, where ${\textbf{A}_e}$ is the coefficient matrix for the linear system, and which has target values specified by ${\textbf{a}_t}$.
 The \textit{nonlinear equality constraints} ${\textbf{h}\left(\textbf{x}\right)}$ have target values specified by $\textbf{h}_t$.
 The \textit{linear inequality constraints} create a linear system $\textbf{A}_i\textbf{x}$, where ${\textbf{A}_i}$ is the coefficient matrix for the linear system, and which has lower bounds $\textbf{a}_L$ and upper bounds $\textbf{a}_U$.
-The \textit{nonlinear inequality constraints} $\textbf{g}\left(\textbf{x}\right)$ have lower bounds $\textbf{g}_L$ and upper bounds $\textbf{g}_R$.
+The \textit{nonlinear inequality constraints} $\textbf{g}\left(\textbf{x}\right)$ have lower bounds $\textbf{g}_L$ and upper bounds $\textbf{g}_U$.
 
 A design point is called \textit{feasible} if it satisfies all of the constraints, and it is called \textit{infeasible} if it violates any of the constraints.
 The \textit{infeasibility} of a design point is a measure of how close the design point is to being feasible.

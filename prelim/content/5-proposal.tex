@@ -1,4 +1,139 @@
 \chapter{Research Proposal}
 \label{chap:proposal}
 
-Placeholder
+% The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization.
+% The way this is done is by applying perturbation theory to the forward and adjoint transport equations to obtain perturbed versions of the transport equations.
+% The perturbed transport equations can be used to calculate the change in some response $\delta R$ due to some change in cross sections $\delta\sigma$ at some location $\vec{r}$.
+% Fundamental to this methodology is that once the forward and adjoint angular fluxes are known throughout the problem domain, the results of many different perturbations can be calculated all at once, without needing to recalculate the angular flux for each perturbation.
+% Thus, a significant amount of insight into possible design improvements can be obtained from a single deterministic forward and adjoint solution.
+
+The ultimate goal of this work is to create a toolset that will automate the optimization of geometry in nuclear systems.
+This toolset will use the methodology and tools described in Sections \ref{chap:dr} and \ref{chap:testprob} to calculate $\delta R$, and it will use the Dakota optimization toolkit to drive the iterative optimization of the system.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Solving Nuclear Optimization Problems}
+\label{sec:proposal:solving_nuclear_optimization_problems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The main development challenge associated with this work will be integrating the calculation of $\delta R\left(\vec{r}\right)$ using ADVANTG with the Dakota optimization toolkit.
+A single calculation of $\delta R\left(\vec{r}\right)$ provides useful information about which perturbations can be made that will improve the performance of the system, but it does not immediately provide a fully optimized solution.
+$\delta R\left(\vec{r}\right)$ may need to be calculated many times for many different combinations of perturbations before an optimized solution is achieved.
+The Dakota toolkit is a natural fit to use as the driver for this optimization process.
+
+%===============================================================================
+\subsection{Using $\delta R$ as Input for an Optimization Problem}
+\label{sec:proposal:nuclear_optimization}
+%===============================================================================
+
+A single calculation of $\delta R\left(\vec{r}\right)$ using ADVANTG provides a mapping between the location of a perturbation and the change in the detector response.
+If a change in material is made at the location $\vec{r}_1$, then the change in the detector response is equal to $\delta R\left(\vec{r}_1\right)$.
+However, if another change in material is made at the location $\vec{r}_2$, then it is not quite accurate to say that the total change in the detector response is equal to $\delta R\left(\vec{r}_1\right) + \delta R\left(\vec{r}_2\right)$.
+This is because the original calculation of $\delta R\left(\vec{r}\right)$ is only valid for the original geometry.
+
+In practice, if $\vec{r}_1$ and $\vec{r}_2$ are located many path lengths away from each other, then the detector response will be very nearly equal to $\delta R\left(\vec{r}_1\right) + \delta R\left(\vec{r}_2\right)$.
+This will also be true if $\vec{r}_1$ and $\vec{r}_2$ are close to each other but the magnitude of the perturbations are small.
+
+Eventually, however, if repeated perturbations are made at points $\vec{r}_3$, $\vec{r}_4$, and beyond, then the original calculation of $\delta R\left(\vec{r}\right)$ will no longer be accurate.
+$\delta R\left(\vec{r}\right)$ will need to be calculated again using ADVANTG to account for the perturbations already made.
+If the goal is to optimize an entire system; e.g. find the optimal material assignments everywhere in the problem domain that results in the maximum detector response, then it is likely that $\delta R\left(\vec{r}\right)$ will need to be calculated many times.
+
+A naive approach one might take when looking to maximize $R$ would be to calculate $\delta R\left(\vec{r}\right)$, make a change in material at its maximum value, recalculate $\delta R\left(\vec{r}\right)$, make another change in material, and repeat this process until there are no more possible perturbations left that result in an increase in $\delta R$.
+This would likely result in the correct answer for problems where there are no strong local minima.
+However, it would also be prohibitively computationally expensive, because a new calculation of $\delta R\left(\vec{r}\right)$ using ADVANTG would be needed for every perturbation.
+
+Depending on the problem, it is likely that many perturbations could be made from a single calculation of $\delta R\left(\vec{r}\right)$, which would massively speed up the optimization process.
+A toolkit like Dakota could be used to drive the iterative optimization process using established optimization techniques.
+
+%===============================================================================
+\subsection{Mathematical Formulation of a Nuclear Optimization Problem}
+\label{sec:proposal:mathematical_formulation}
+%===============================================================================
+
+This section will describe how a simple nuclear optimization problem would be formulated in terms of the notation of a general optimization problem.
+The simple nuclear optimization problem will have the following properties:
+\begin{enumerate}
+  \item The geometry is divided into a small volume elements, each of which have their own material.
+  \item Some subset of the volume elements in the problem is available for optimization.
+  \item Every volume element in the subset subject to optimization must contain some combination of materials A, B, and C.
+  \item The total volume fraction of materials A, B, and C for each volume element must be equal to 1.
+  \item The goal of the problem is simply to maximize the detector response.
+\end{enumerate}
+
+The mathematical formulation of a general optimization problem, shown in Equation \ref{eq:bg:opt:optimization_problem}, is repeated here:
+\begin{equation*}\begin{split}
+  \mbox{minimize:}  \quad & f\left(\textbf{x}\right) \\
+                          & \textbf{x} \in \mathbb{R}^n \\
+  \mbox{subject to:}\quad & \textbf{g}_L \leq \textbf{g}\left(\textbf{x}\right) \leq \textbf{g}_U \\
+                          & \textbf{h}\left(\textbf{x}\right) = \textbf{h}_t \\
+                          & \textbf{a}_L \leq \textbf{A}_i\textbf{x} \leq \textbf{a}_U \\
+                          & \textbf{A}_e\textbf{x} = \textbf{a}_t \\
+                          & \textbf{x}_L \leq \textbf{x} \leq \textbf{x}_U
+\end{split}\end{equation*}
+
+The \textit{design variables} $\textbf{x}$ are the volume fractions of materials A, B, and C in each volume element in the subset available for optimization.
+
+% Since the sum of the volume fractions of materials A, B, and C is always equal to 1, if the volume fraction of material A and B are known, the volume fraction of material C is also known.
+% This means that the volume fraction of material C does not need to be encoded separately.
+
+There are \textit{constraints} on $\textbf{x}$ in the form of lower bounds $\textbf{x}_L = 0$ and upper bounds $\textbf{x}_U = 1$.
+These constraints constrain the volume fractions of materials A, B, and C to be between 0 and 1.
+
+The \textit{objective function} $f$ is equal to $-R$.
+The reason it is negative is because the goal of a general optimization problem is always to minimize the objective function, while in this problem it is desired to maximize the detector response.
+
+\textit{Linear equality constraints} are used to guarantee that the total volume fraction of materials A, B, and C in each volume element are equal to 1.
+For a single volume element, the equation for the linear equality constraints $\textbf{A}_e\textbf{x} = \textbf{a}_t$ expands to
+\begin{equation}
+  \begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}
+  \begin{bmatrix}v_A       \\ v_B       \\ v_C      \end{bmatrix} = 1,
+\end{equation}
+where $v_A$, $v_B$, and $v_C$ are the volume fractions of materials A, B, and C, respectively.
+
+The simple optimization problem does not contain any nonlinear equality constraints $\textbf{h}\left(\textbf{x}\right) = \textbf{h}_t$, linear inequality constraints $\textbf{a}_L \leq \textbf{A}_i\textbf{x} \leq \textbf{a}_U$, or nonlinear inequality constraints $\textbf{g}_L \leq \textbf{g}\left(\textbf{x}\right) \leq \textbf{g}_U$.
+
+Gradient-based optimization methods will be appropriate to solve nuclear optimization problems in this manner.
+In fact, the whole point of calculating $\delta R\left(\vec{r}\right)$, as opposed to simply calculating $R$, is that $\delta R\left(\vec{r}\right)$ provides gradient information, which allows for the use of gradient-based optimization methods.
+
+%===============================================================================
+\subsection{Software Integration with Dakota}
+\label{sec:proposal:software_integration_with_dakota}
+%===============================================================================
+
+There are several software development tasks that will need to be completed in order to integrate the calculation of $\delta R\left(\vec{r}\right)$ using ADVANTG with the Dakota optimization toolkit.
+
+During the optimization process, the optimization solver will make repeated requests to calculate the objective function for various design points.
+When interfacing with external programs, Dakota specifies design points by writing text files.
+Thus, ADVANTG must be configured to be able to read these text files and modify the system accordingly.
+ADVANTG must also be configured to provide the results of the $\delta R\left(\vec{r}\right)$ calculation in a format that is readable by Dakota.
+
+Work will also need to be done in order to select the correct optimization algorithm and other options to be used by Dakota.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Constraints and Complex Objective Functions}
+\label{sec:proposal:constraints_and_complex_objective_functions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Non-Fixed Source and Detector Locations}
+% \label{sec:proposal:moving_source_and_detector}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Calculation of $\delta R$ with Anisotropic Scattering}
+\label{sec:proposal:anisotropic_scattering}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Mixed Material Optimization}
+% \label{sec:proposal:mixed_materials}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Validation}
+\label{sec:proposal:validation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Demonstration}
+\label{sec:proposal:demonstration}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
