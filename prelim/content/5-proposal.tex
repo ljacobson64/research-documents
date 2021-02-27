@@ -123,6 +123,23 @@ Work will also need to be done in order to select the correct optimization algor
 \label{sec:proposal:anisotropic_scattering}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+The expression for $\delta R\left(\vec{r}\right)$ is divided into a total term $\delta R_t\left(\vec{r}\right)$ and a scattering term $\delta s\left(\vec{r}\right)$.
+The full definition of the scattering term is shown in Equation \ref{eq:dr:dr_scattering_term_1} and is repeated here:
+\begin{multline*}
+  \delta R_s\left(\vec{r}\right) =
+  \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
+  \left(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime\right)dEd\hat{\Omega}.
+\end{multline*}
+In order to simplify the calculation process, isotropic scattering was assumed, which resulted Equation \ref{eq:dr:dr_scattering_term}:
+\begin{equation*}
+  \delta R_s\left(\vec{r}\right) =
+  \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE.
+\end{equation*}
+
+However, there are no computational reasons why isotropic scattering must be assumed.
+Denovo supports Legendre scattering expansions up to the 11th order, and most of the multigroup cross section libraries used by ADVANTG contain scattering data up to the 5th or 7th order.
+Thus, it should be possible to calculate $\delta R$ without assuming isotropic scattering, and this should improve the accuracy of the results without incurring too much computational cost.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Mixed Material Optimization}
 % \label{sec:proposal:mixed_materials}
