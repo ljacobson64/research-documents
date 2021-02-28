@@ -113,6 +113,25 @@ Work will also need to be done in order to select the correct optimization algor
 \label{sec:proposal:constraints_and_complex_objective_functions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Section \ref{sec:proposal:solving_nuclear_optimization_problems} describes the process for solving an optimization problem where the only goal is to minimize or maximize some response.
+However, it may often be the case that the goal is more complicated than that.
+
+Here are some examples of more complex goals:
+\begin{enumerate}
+\item Maximize the difference of Responses A and B ($R_A$ and $R_B$, respectively.)
+      This would be achieved by setting the objective function $f = -\left(R_A - R_B\right)$.
+\item Minimize the ratio of Responses A and B.
+      This would be achieved by setting $f = R_A/R_B$.
+\item Maximize Response A while requiring Response B to be below a threshold value $t_b$.
+      This could be encoded by setting \[f = \begin{cases} -R_A & \text{if } R_B < t_B \\ 0 & \text{if } R_B > t_B. \end{cases}\]
+\item Maximize the response $R$ while only allowing certain amounts of each material to exist in the problem, or while keeping the total "cost" of all materials below some threshold.
+      These could be achieved with linear inequality constraints.
+\item Minimize the total "cost" of materials $C_\text{total}$ that results in a response $R$ being greater than some threshold value $R_\text{min}$.
+      This could be encoded by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min}. \end{cases}\]
+\end{enumerate}
+
+It will be necessary to add functionality to the software to allow for some or all of these types of goals.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Non-Fixed Source and Detector Locations}
 % \label{sec:proposal:moving_source_and_detector}
