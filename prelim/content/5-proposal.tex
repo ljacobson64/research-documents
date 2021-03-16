@@ -130,7 +130,7 @@ Here are some examples of more complex goals:
       This could be encoded by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min}. \end{cases}\]
 \end{enumerate}
 
-It will be necessary to add functionality to the software to allow for some or all of these types of goals.
+It will be necessary to add functionality to the toolset to allow for some or all of these types of goals.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Non-Fixed Source and Detector Locations}
@@ -168,6 +168,23 @@ Thus, it should be possible to calculate $\delta R$ without assuming isotropic s
 \section{Validation}
 \label{sec:proposal:validation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+After selecting a test problem, calculating $\delta R$, and using the toolset to produce an optimized system, it will need to be shown that the solution is actually optimal.
+
+One way this could be done would be to use a pure Monte Carlo calculation as the simulation code used by Dakota instead of the ADVANTG-based code.
+The outputs from Dakota would be the same in this case as they would be in the actual toolset; that is, the output would contain information about how the geometry and materials should be set up for the next iteration in the optimization algorithm.
+However, the output from the Monte Carlo calculation would only provide the result, without the gradient information ($\delta R$) that is provided by the toolset.
+This limitation means that Dakota would need to be configured to use a nongradient-based optimization method.
+If the optimal solution found by the toolset is similar enough to the optimal solution found by the pure Monte Carlo-based Dakota optimization, then the toolset's solution could be taken as optimal.
+
+It may be the case that the toolset's solution will be optimal for some problems but not optimal for others.
+If non-optimal solutions are obtained, work will need to be done to determine why the toolset did not find the optimal solution and whether it can be mofified to produce more optimal results in these cases.
+For example, it is hypothesized that the current methodology used to calculate $\delta R$ will be sufficient for problems where the source and detector are in regions where the neutron field is nearly isotropic, whereas it will not be sufficient for problems with a great deal of anisotropy.
+If a problem like this were to be encountered, one attempt that could be made to fix it would be to implement the strategy outlined in Section \ref{sec:proposal:anisotropic_scattering}.
+
+Since a nongradient-based optimization method would need to be used for the validation, the validation will require many more simulations to produce an optimized solution compared to the toolset.
+Additionally, it is expected that for some problems, each Monte Carlo simulation will have a longer runtime than the equivalent ADVANTG simulation due to the general need for Monte Carlo codes to run large numbers of particle histories in order to for them to obtain accurate results.
+It would be an interesting exercise to compare the total amount of time it takes to find an optimal solution between the Monte Carlo validation and the toolset's optimization and to calculate the speedup.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Demonstration}
