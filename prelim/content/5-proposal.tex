@@ -133,9 +133,12 @@ Here are some examples of more complex goals:
 It will be necessary to add functionality to the toolset to allow for some or all of these types of goals.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \section{Non-Fixed Source and Detector Locations}
-% \label{sec:proposal:moving_source_and_detector}
+\section{Non-Fixed Source and Detector Locations}
+\label{sec:proposal:moving_source_and_detector}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Problems could be conceived where the locations of the source, detector, or both are not fixed in space.
+Additional equations will need to be derived and more functionality will needed to be added to the toolset to account for these types of problems.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Calculation of $\delta R$ with Anisotropic Scattering}
@@ -149,7 +152,7 @@ The full definition of the scattering term is shown in Equation \ref{eq:dr:dr_sc
   \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \left(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime\right)dEd\hat{\Omega}.
 \end{multline*}
-In order to simplify the calculation process, isotropic scattering was assumed, which resulted Equation \ref{eq:dr:dr_scattering_term}:
+In order to simplify the calculation process, isotropic scattering was assumed, which resulted in Equation \ref{eq:dr:dr_scattering_term}:
 \begin{equation*}
   \delta R_s\left(\vec{r}\right) =
   \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE.
@@ -178,7 +181,7 @@ This limitation means that Dakota would need to be configured to use a nongradie
 If the optimal solution found by the toolset is similar enough to the optimal solution found by the pure Monte Carlo-based Dakota optimization, then the toolset's solution could be taken as optimal.
 
 It may be the case that the toolset's solution will be optimal for some problems but not optimal for others.
-If non-optimal solutions are obtained, work will need to be done to determine why the toolset did not find the optimal solution and whether it can be mofified to produce more optimal results in these cases.
+If non-optimal solutions are obtained, work will need to be done to determine why the toolset did not find the optimal solution and whether it can be modified to produce more optimal results in these cases.
 For example, it is hypothesized that the current methodology used to calculate $\delta R$ will be sufficient for problems where the source and detector are in regions where the neutron field is nearly isotropic, whereas it will not be sufficient for problems with a great deal of anisotropy.
 If a problem like this were to be encountered, one attempt that could be made to fix it would be to implement the strategy outlined in Section \ref{sec:proposal:anisotropic_scattering}.
 
@@ -190,3 +193,27 @@ It would be an interesting exercise to compare the total amount of time it takes
 \section{Demonstration}
 \label{sec:proposal:demonstration}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+After showing that the toolset can produce optimized systems for some set of small sample problems, the last step will be to demonstrate that the toolset can be used to optimize larger, more complicated systems that might be used in the real world.
+One potential demonstration problem will be described.
+
+The goal of the demonstration problem is to optimize a boron neutron capture therapy (BNCT) system.
+BNCT is a type of radiation therapy used to treat cancer patients (most commonly those with brain tumors who had already exhausted all other potential treatments.)
+In BNCT, a ${}^{10}\text{B}$-containing compound is administered to the patient, and the compound is preferentially taken up by the brain tumor.
+The patient is then irradiated with neutrons, which are preferentially absorbed in the tumor due to the very high absorption cross section of ${}^{10}\text{B}$ for thermal neutrons (about 3850 barns at 0.025 eV.)
+When a ${}^{10}\text{B}$ nucleus absorbs a thermal neutron, it undergoes the ${}^{10}\text{B}\left(n,\alpha\right){}^{7}\text{Li}$ reaction, which results in the local deposition of an alpha particle inside the tumor.
+
+Despite the fact that boron-10 has its highest cross section at thermal neutron energies, the neutrons used to irradiate BNCT patients are most commonly at epithermal energies.
+The reason for this is that thermal neutrons do not generally penetrate deep enough into the patient to reach the brain tumor.
+Epithermal neutrons penetrate deeper and thermalize within the patient's body, which results in a higher and more uniform ${}^{10}\text{B}$ reaction rate.
+
+According to a 2001 IAEA technical document concerning the status of neutron capture therapy \cite{iaea2001}, the epithermal neutron beam should have the following characteristics for it to be useful for BNCT:
+\begin{enumerate}
+\item The epithermal neutron flux (between 0.5 eV and 10 keV) should be greater than $10^9$ n/$\text{cm}^2$-s.
+\item The ratio of fast neutron flux (greater than 10 keV) to epithermal neutron flux should be less than $2\times 10^{-13}$ Gy-$\text{cm}^2$/n.
+\item The ratio of gamma dose rate to epithermal neutron flux should be less than $2\times 10^{-13}$ Gy-$\text{cm}^2$/n.
+\item The ratio of thermal neutron flux (less than 0.5 eV) to epithermal neutron flux should be less than 0.05.
+\item The ratio of total neutron current to total neutron flux should be greater than 0.7.
+\end{enumerate}
+The reason for the epithermal flux requirement is to decrease the irradiation time.
+The reason for the beam quality requirements is to reduce undesired dose to healthy tissue.
