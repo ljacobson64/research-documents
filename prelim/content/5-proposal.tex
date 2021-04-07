@@ -118,16 +118,16 @@ However, it may often be the case that the goal is more complicated than that.
 
 Here are some examples of more complex goals:
 \begin{enumerate}
-\item Maximize the difference of Responses A and B ($R_A$ and $R_B$, respectively.)
-      This would be achieved by setting the objective function $f = -\left(R_A - R_B\right)$.
-\item Minimize the ratio of Responses A and B.
-      This would be achieved by setting $f = R_A/R_B$.
-\item Maximize Response A while requiring Response B to be below a threshold value $t_b$.
-      This could be encoded by setting \[f = \begin{cases} -R_A & \text{if } R_B < t_B \\ 0 & \text{if } R_B > t_B. \end{cases}\]
-\item Maximize the response $R$ while only allowing certain amounts of each material to exist in the problem, or while keeping the total "cost" of all materials below some threshold.
-      These could be achieved with linear inequality constraints.
-\item Minimize the total "cost" of materials $C_\text{total}$ that results in a response $R$ being greater than some threshold value $R_\text{min}$.
-      This could be encoded by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min}. \end{cases}\]
+  \item Maximize the difference of Responses A and B ($R_A$ and $R_B$, respectively.)
+        This would be achieved by setting the objective function $f = -\left(R_A - R_B\right)$.
+  \item Minimize the ratio of Responses A and B.
+        This would be achieved by setting $f = R_A/R_B$.
+  \item Maximize Response A while requiring Response B to be below a threshold value $t_b$.
+        This could be encoded by setting \[f = \begin{cases} -R_A & \text{if } R_B < t_B \\ 0 & \text{if } R_B > t_B. \end{cases}\]
+  \item Maximize the response $R$ while only allowing certain amounts of each material to exist in the problem, or while keeping the total "cost" of all materials below some threshold.
+        These could be achieved with linear inequality constraints.
+  \item Minimize the total "cost" of materials $C_\text{total}$ that results in a response $R$ being greater than some threshold value $R_\text{min}$.
+        This could be encoded by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min}. \end{cases}\]
 \end{enumerate}
 
 It will be necessary to add functionality to the toolset to allow for some or all of these types of goals.
@@ -195,13 +195,26 @@ It would be an interesting exercise to compare the total amount of time it takes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 After showing that the toolset can produce optimized systems for some set of small sample problems, the last step will be to demonstrate that the toolset can be used to optimize larger, more complicated systems that might be used in the real world.
-One potential demonstration problem will be described.
+Useful demonstration problems should have some the following properties:
+\begin{enumerate}
+  \item Geometric complexity
+  \item Constraints
+  \item Cost considerations
+  \item Real-world applicability
+\end{enumerate}
+One potential demonstration problem will be described below.
+
+%===============================================================================
+\subsection{Boron Neutron Capture Therapy}
+\label{sec:proposal:bnct}
+%===============================================================================
 
 The goal of the demonstration problem is to optimize a boron neutron capture therapy (BNCT) system.
 BNCT is a type of radiation therapy used to treat cancer patients (most commonly those with brain tumors who had already exhausted all other potential treatments.)
 In BNCT, a ${}^{10}\text{B}$-containing compound is administered to the patient, and the compound is preferentially taken up by the brain tumor.
 The patient is then irradiated with neutrons, which are preferentially absorbed in the tumor due to the very high absorption cross section of ${}^{10}\text{B}$ for thermal neutrons (about 3850 barns at 0.025 eV.)
-When a ${}^{10}\text{B}$ nucleus absorbs a thermal neutron, it undergoes the ${}^{10}\text{B}\left(n,\alpha\right){}^{7}\text{Li}$ reaction, which results in the local deposition of an alpha particle inside the tumor.
+When a ${}^{10}\text{B}$ nucleus absorbs a thermal neutron, it undergoes the ${}^{10}\text{B}\left(n,\alpha\right){}^{7}\text{Li}$ reaction, which releases an alpha particle.
+These alpha particles have very short path lengths in tissue (several $\mu$m), so all of their energy is deposited locally, inside the tumor.
 
 Despite the fact that boron-10 has its highest cross section at thermal neutron energies, the neutrons used to irradiate BNCT patients are most commonly at epithermal energies.
 The reason for this is that thermal neutrons do not generally penetrate deep enough into the patient to reach the brain tumor.
@@ -209,11 +222,57 @@ Epithermal neutrons penetrate deeper and thermalize within the patient's body, w
 
 According to a 2001 IAEA technical document concerning the status of neutron capture therapy \cite{iaea2001}, the epithermal neutron beam should have the following characteristics for it to be useful for BNCT:
 \begin{enumerate}
-\item The epithermal neutron flux (between 0.5 eV and 10 keV) should be greater than $10^9$ n/$\text{cm}^2$-s.
-\item The ratio of fast neutron flux (greater than 10 keV) to epithermal neutron flux should be less than $2\times 10^{-13}$ Gy-$\text{cm}^2$/n.
-\item The ratio of gamma dose rate to epithermal neutron flux should be less than $2\times 10^{-13}$ Gy-$\text{cm}^2$/n.
-\item The ratio of thermal neutron flux (less than 0.5 eV) to epithermal neutron flux should be less than 0.05.
-\item The ratio of total neutron current to total neutron flux should be greater than 0.7.
+  \item The epithermal neutron flux (between 0.5 eV and 10 keV) should be greater than $10^9$ n/$\text{cm}^2$-s.
+  \item The ratio of fast neutron flux (greater than 10 keV) to epithermal neutron flux should be less than $2\times 10^{-13}$ Gy-$\text{cm}^2$/n.
+  \item The ratio of gamma dose rate to epithermal neutron flux should be less than $2\times 10^{-13}$ Gy-$\text{cm}^2$/n.
+  \item The ratio of thermal neutron flux (less than 0.5 eV) to epithermal neutron flux should be less than 0.05.
+  \item The ratio of total neutron current to total neutron flux should be greater than 0.7.
 \end{enumerate}
 The reason for the epithermal flux requirement is to decrease the irradiation time.
 The reason for the beam quality requirements is to reduce undesired dose to healthy tissue.
+
+A lightly optimized design for a BNCT system, based off a design presented in \cite{monshizadeh2015}, is shown in Figure \ref{fig:proposal:bnct_geom}.
+The design has uses a DT fusion (~14 MeV) neutron source with a source strength of $5\times 10^{13}$ n/s.
+It uses the expensive "FLUENTAL" material, which is a mixture of 30% aluminum, 69% aluminum fluoride, and 1% lithium fluoride by mass, as the main material in the beam shaping assembly with the purpose of lowering the high-energy source neutrons down to epithermal energies, but not to thermal energies.
+It uses thin layers of cadmium and bismuth to reduce the thermal neutron and gamma population in the patient area.
+It surrounds the beam shaping assembly with a large amount of lead, which acts as a epithermal neutron reflector as well as an absorber of gammas.
+It contains a conical region of air between the beam shaping assembly and the patient area to obtain a more directional beam.
+Lastly, it surrounds the entire assembly with thick layers of high-density borated concrete to reduce the dose to areas other than the patient area.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.75\linewidth]{content/proposal/BNCT_geom.png}
+  \caption{Example geometry for a BNCT system.}
+  \label{fig:proposal:bnct_geom}
+\end{figure}
+
+The design is not highly optimized.
+It only contains simple types of geometry; i.e. rectangular parallelepipeds and right circular cylinders (RPPs and RCCs in MCNP.)
+No attempt was made to minimize usage of the highly expensive FLUENTAL material.
+Table \ref{tab:proposal:bnct_metrics} shows that the design meets some of the requirements by large margins, but does not meet all requirements.
+\begin{table}[h]
+  \centering
+  \caption{Performance metrics for the example BNCT system design.}
+  \label{tab:proposal:bnct_metrics}
+  \strutlongstacks{T}
+  \begin{tabular}{| c | c | c | c | c |}
+    \hline
+    \textbf{Performance metric}                                         & \textbf{Units}     & \textbf{Value}       & \textbf{Requirement} & \Centerstack{\textbf{Meets} \\ \textbf{Requirement?}} \\ \hline
+    Epithermal flux                                                     & n/$\text{cm}^2$-s  & $2.6\times 10^9    $ & > $10^9$             & True                                                  \\ \hline
+    \Centerstack{Ratio of fast neutron dose \\ rate to epithermal flux} & Gy-$\text{cm}^2$/n & $7.4\times 10^{-13}$ & < $2\times 10^{-13}$ & False                                                 \\ \hline
+    \Centerstack{Ratio of gamma dose        \\ rate to epithermal flux} & Gy-$\text{cm}^2$/n & $9.9\times 10^{-14}$ & < $2\times 10^{-13}$ & True                                                  \\ \hline
+    \Centerstack{Ratio of thermal flux      \\ to epithermal flux     } & -                  & 0.0057               & < 0.05               & True                                                  \\ \hline
+    \Centerstack{Ratio of total neutron     \\ current to flux        } & -                  & 0.62                 & > 0.7                & False                                                 \\ \hline
+  \end{tabular}
+\end{table}
+
+The proposal for the demonstration problem is to use the toolset to create a more optimized design for the BNCT system.
+Here are some examples of optimization problems that could be solved:
+\begin{enumerate}
+  \item Design a system with the maximum possible epithermal neutron flux while meeting the four beam quality metrics.
+  \item Design a system with the maximum possible epithermal neutron flux while meeting the four beam quality metrics and also only containing a certain mass of FLUENTAL.
+  \item Design a system that meets the epithermal flux requirement and the four beam quality metrics with the minimum possible mass of FLUENTAL.
+  \item Design a system that meets the epithermal flux requirement and the four beam quality metrics with the minimum possible total system cost, where each material is assigned a cost per unit mass.
+\end{enumerate}
+
+These optimization problems would satisfy the requirements laid out at the beginning of Section \ref{sec:proposal:demonstration}.
+The resultant geometries would exhibit geometric complexity, the formulations of the optimization problems would contain several types of constraints, cost considerations would be made, and the problem would be applicable to a real-world nuclear system.
