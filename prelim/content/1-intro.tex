@@ -1,7 +1,7 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-When analyzing nuclear systems such as fission reactors, fission reactors, and accelerators, it is usually necessary to use a Monte Carlo code like MCNP \cite{mcnp620} to predict system performance.
+When analyzing nuclear systems such as fission reactors, fusion reactors, and accelerators, it is usually necessary to use a Monte Carlo code like MCNP \cite{mcnp620} to predict system performance.
 Monte Carlo codes use the Monte Carlo method, which is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
 The method allows for detailed representations of geometry and continuous energy and angle space.
 However, it is quite computationally expensive because many particles may need to be simulated in order to achieve reliable results.
@@ -10,22 +10,23 @@ These computing requirements are usually managed by utilizing the resources of a
 
 Another class of radiation transport methods is known as deterministic methods.
 Deterministic solvers like Denovo \cite{denovo} solve the transport equation directly, and they generally produce detailed solutions throughout the entire phase space (space, angle, and energy) of a problem.
-However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces uncertainties in the results.
-Additionally, they may exhibit non-physical features such as ray effects and negative fluxes.
+However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces approximations in the results.
+Additionally, their angular discretization schemes may cause the results to exhibit non-physical features such as ray effects and negative fluxes.
 For these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
 
-Deterministic methods are not entirely without use though.
-For example, in deep penetration problems (with which Monte Carlo methods have considerably difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
+However, deterministic transport has been proven to be very useful when used in conjunction with Monte Carlo simulations in so-called "hybrid methods."
+For example, in deep penetration problems (with which Monte Carlo methods have considerable difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
 In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation; an approximate solution is sufficient.
 
 When a nuclear system is in the design phase, many parametric studies of Monte Carlo simulations must be performed in order to approach an optimal configuration of geometry and materials.
+This process is referred to as "human guided optimization."
 These parametric studies can take an enormous amount of computational resources, given that each data point requires its own Monte Carlo simulation.
 
 The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization.
 The way this is done is by applying perturbation theory to the forward and adjoint transport equations to obtain perturbed versions of the transport equations.
 The perturbed transport equations can be used to calculate the change in some response $\delta R$ due to some change in cross sections $\delta\sigma$ at some location $\vec{r}$.
 Fundamental to this methodology is that once the forward and adjoint angular fluxes are known throughout the problem domain, the results of many different perturbations can be calculated all at once, without needing to recalculate the angular flux for each perturbation.
-Thus, a significant amount of insight into possible design improvements can be obtained from a single deterministic forward and adjoint solution.
+Thus, a significant amount of insight into possible design improvements can be obtained from a single deterministic transport calculation.
 
 Here follows the layout of this document.
 Chapter \ref{chap:bg} first provides relevant background on radiation transport, perturbation theory as it applies to radiation transport, and shape optimization methods.

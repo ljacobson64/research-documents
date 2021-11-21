@@ -158,7 +158,7 @@ Adjoint particles, however, stream outward from the detector and a response is c
 Adjoint particles also undergo scattering in reverse, gaining energy through scattering instead of losing energy.
 
 There is an important physical interpretation of the adjoint flux: the adjoint flux at a point is equal to the \textit{importance} of particles emitted at that point to the detector response.
-In other words, the adjoint flux at some location $\vec{r}_0, \hat{\Omega}_0, E_0$ indicates how much a source at that location would contribute to the detector response.
+In other words, the adjoint flux at some location $\left(\vec{r}_0, \hat{\Omega}_0, E_0\right)$ indicates how much a particle at that location would contribute to the detector response.
 
 The time-independent adjoint operator $H^+$ operates on the adjoint angular flux $\psi^+$ and is given by
 \begin{multline}\label{eq:bg:rt:adjoint_transport_operator}
@@ -242,15 +242,15 @@ Figure \ref{fig:bg:discrete-ordinates} shows a visualization of the type of angl
   \label{fig:bg:discrete-ordinates}
 \end{figure}
 
-This discretization introduces uncertainties in the results.
+This discretization introduces approximations in the results.
 Real-world geometries cannot be perfectly divided into boxes, real-world particles can move in any direction, and real-world cross sections are continuous in energy.
 It is possible to increase the fidelity of a model by decreasing the size of the boxes, but at the cost of an increased amount of computation.
 Additionally, discrete ordinates methods can sometimes produce non-physical results such as ray effects (caused by the angle discretization) and negative fluxes (caused by certain types of spatial discretization).
 
 For all of these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
 
-Deterministic methods are not entirely without use though.
-For example, in deep penetration problems (with which Monte Carlo methods have considerably difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
+However, deterministic transport has been proven to be very useful when used in conjunction with Monte Carlo simulations in so-called "hybrid methods."
+For example, in deep penetration problems (with which Monte Carlo methods have considerable difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
 In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation; an approximate solution is sufficient.
 
 %-------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ Figure \ref{fig:bg:monte-carlo} shows an example of a random particle history si
   \label{fig:bg:monte-carlo}
 \end{figure}
 
-Since Monte Carlo codes simulate particles randomly and infer results based on average particle behavior, every result obtained from Monte Carlo codes have an associated uncertainty.
+Since Monte Carlo codes simulate particles randomly and infer results based on average particle behavior, every result obtained from Monte Carlo codes have an associated statistical uncertainty.
 The more particles simulated, the lower the uncertainty.
 For highly complex problems, the number of particles that must be simulated in order to obtain reliable results is on the order of billions.
 This means that Monte Carlo simulations are generally much more computationally expensive than determinstic simulations.

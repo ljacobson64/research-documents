@@ -135,7 +135,7 @@ The total term $\delta R_t$ is given by
 It can be simplified because $\delta\sigma_t$ has no angular dependence:
 \begin{equation}\label{eq:dr:dr_total_term_2}
   \delta R_t\left(\vec{r}\right) =
-  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}dE.
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\left[\int_{4\pi}\psi\left(\vec{r},\hat{\Omega},E\right)\psi^+\left(\vec{r},-\hat{\Omega},E\right)d\hat{\Omega}\right]dE.
 \end{equation}
 The final form of the equation for the total term results from the definition of the scalar contributon flux (Equation \ref{eq:bg:rt:scalar_contributon}):
 \begin{equation}\label{eq:dr:dr_total_term}
@@ -149,7 +149,9 @@ The scattering term $\delta R_s$ is given by
   \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
   \left(\int_{4\pi}\int_0^\infty\delta\sigma_s\left(\vec{r},\hat{\Omega}^\prime\rightarrow\hat{\Omega},E^\prime\rightarrow E\right)\psi\left(\vec{r},\hat{\Omega}^\prime,E^\prime\right)dE^\prime d\hat{\Omega}^\prime\right)dEd\hat{\Omega}.
 \end{multline}
-If isotropic scattering is assumed, then the equation becomes
+Scattering is not generally isotropic, but if isotropic scattering is assumed, the implementation is simplified considerably.
+Thus, isotropic scattering will be assumed for now, but this assumption may be revisited in future work.
+With isotropic scattering, the equation becomes
 \begin{multline}\label{eq:dr:dr_scattering_term_2}
   \delta R_s\left(\vec{r}\right) =
   \int_{4\pi}\int_0^\infty\psi^+\left(\vec{r},-\hat{\Omega},E\right) \times \\
@@ -166,11 +168,16 @@ Bringing the terms together yields the final equation for $\delta R\left(\vec{r}
 \begin{empheq}[box=\fbox]{multline}\label{eq:dr:dr_function_of_position_final}
   \delta R\left(\vec{r}\right) =
   \int_0^\infty\phi^+\left(\vec{r},E\right)\left(\int_0^\infty\delta\sigma_s\left(\vec{r},E^\prime\rightarrow E\right)\phi\left(\vec{r},E^\prime\right)dE^\prime\right)dE - \\
-  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\Phi\left(\vec{r},E\right)dE.
+  \int_0^\infty\delta\sigma_t\left(\vec{r},E\right)\phi\left(\vec{r},E\right)dE.
 \end{empheq}
 
 Equation \ref{eq:dr:dr_function_of_position_final} implies something profound: if $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated for any perturbations $\sigma_t$ and $\sigma_s$.
 Thus, $\psi$ and $\psi^+$ only need to be calculated a single time in order to calculate the effects of making any perturbation anywhere in the geometry.
+
+This result does not imply, however, that a single calculation of $\psi$ and $\psi^+$ is sufficient to fully optimize the geometry.
+Discarding the perturbed second-order terms is only allowable if the perturbation is small.
+The more perturbations made at once, the larger the effect of the second-order terms, and the less accurate the calculation of $\delta R$.
+Since many perturbations throughout the geometry will be necessary to achieve an optimized solution, $\psi$ and $\psi^+$ will need to be recalculated periodically to reduce the effect of the second-order terms.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementation}

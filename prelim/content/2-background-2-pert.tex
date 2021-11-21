@@ -38,13 +38,13 @@ and
 \end{equation}
 where $\bar{H}$ is the perturbed transport operator, $\bar{\psi}$ is the perturbed flux, $\bar{H}^+$ is the perturbed adjoint transport operator, and $\bar{\psi}^+$ is the perturbed adjoint flux.
 
-Combining Equations \ref{eq:bg:pt:green29} and \ref{eq:bg:pt:green29_perturbed} and rearranging terms yields the following identity:
+Combining Equations \ref{eq:bg:pt:green29} and \ref{eq:bg:pt:green29_perturbed}, rearranging terms, and discarding the second-order term $\delta H\delta\psi$ yields the following identity:
 \begin{equation}\label{eq:bg:pt:green44a}\begin{split}
-  H\psi             & = \bar{H}\bar{\psi} \\
-  H\psi             & = \left(H+\delta H\right)\left(\psi+\delta\psi\right) \\
-  0                 & = H\delta\psi + \delta H\psi + \delta H\delta\psi \\
-  0                 & = \bar{H}\delta\psi + \delta H\psi \\
-  \bar{H}\delta\psi & = -\delta H\psi.
+  H\psi       & = \bar{H}\bar{\psi} \\
+  H\psi       & = \left(H+\delta H\right)\left(\psi+\delta\psi\right) \\
+  0           & = H\delta\psi + \delta H\psi + \cancel{\delta H\delta\psi} \\
+  0           & = H\delta\psi + \delta H\psi \\
+  H\delta\psi & = -\delta H\psi.
 \end{split}\end{equation}
 
 If a detector has a response function $q^+$, then the detector response $R$ to an external source $q$ in the unperturbed system is given by
