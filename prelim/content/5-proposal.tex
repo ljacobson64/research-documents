@@ -124,9 +124,9 @@ Here are some examples of more complex goals:
         This would be achieved by setting $f = R_A/R_B$.
   \item Maximize Response A while requiring Response B to be below a threshold value $t_b$.
         This could be encoded by setting \[f = \begin{cases} -R_A & \text{if } R_B < t_B \\ 0 & \text{if } R_B > t_B. \end{cases}\]
-  \item Maximize the response $R$ while only allowing certain amounts of each material to exist in the problem, or while keeping the total "cost" of all materials below some threshold.
+  \item Maximize the response $R$ while only allowing certain amounts of each material to exist in the problem, or while keeping the total ``cost'' of all materials below some threshold.
         These could be achieved with linear inequality constraints.
-  \item Minimize the total "cost" of materials $C_\text{total}$ that results in a response $R$ being greater than some threshold value $R_\text{min}$.
+  \item Minimize the total ``cost'' of materials $C_\text{total}$ that results in a response $R$ being greater than some threshold value $R_\text{min}$.
         This could be encoded by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min}. \end{cases}\]
 \end{enumerate}
 
@@ -233,7 +233,7 @@ The reason for the beam quality requirements is to reduce undesired dose to heal
 
 A lightly optimized design for a BNCT system, based on a design presented in \cite{monshizadeh2015}, is shown in Figure \ref{fig:proposal:bnct_geom}.
 The design has uses a DT fusion (\textasciitilde 14 MeV) neutron source with a source strength of $5\times 10^{13}$ n/s.
-It uses the expensive "FLUENTAL" material, which is a mixture of 30\% aluminum, 69\% aluminum fluoride, and 1\% lithium fluoride by mass, as the main material in the beam shaping assembly with the purpose of lowering the high-energy source neutrons down to epithermal energies, but not to thermal energies.
+It uses the expensive ``FLUENTAL'' material, which is a mixture of 30\% aluminum, 69\% aluminum fluoride, and 1\% lithium fluoride by mass, as the main material in the beam shaping assembly with the purpose of lowering the high-energy source neutrons down to epithermal energies, but not to thermal energies.
 It uses thin layers of cadmium and bismuth to reduce the thermal neutron and gamma population in the patient area.
 It surrounds the beam shaping assembly with a large amount of lead, which acts as a epithermal neutron reflector as well as an absorber of gammas.
 It contains a conical region of air between the beam shaping assembly and the patient area to obtain a more directional beam.

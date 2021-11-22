@@ -14,12 +14,12 @@ However, in order to do this, they must first discretize the geometry, angles, a
 Additionally, their angular discretization schemes may cause the results to exhibit non-physical features such as ray effects and negative fluxes.
 For these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
 
-However, deterministic transport has been proven to be very useful when used in conjunction with Monte Carlo simulations in so-called "hybrid methods."
+However, deterministic transport has been proven to be very useful when used in conjunction with Monte Carlo simulations in so-called ``hybrid methods.''
 For example, in deep penetration problems (with which Monte Carlo methods have considerable difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
 In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation; an approximate solution is sufficient.
 
 When a nuclear system is in the design phase, many parametric studies of Monte Carlo simulations must be performed in order to approach an optimal configuration of geometry and materials.
-This process is referred to as "human guided optimization."
+This process is referred to as ``human-guided optimization.''
 These parametric studies can take an enormous amount of computational resources, given that each data point requires its own Monte Carlo simulation.
 
 The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization.

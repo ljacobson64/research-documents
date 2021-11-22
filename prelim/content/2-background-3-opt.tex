@@ -8,8 +8,10 @@ The field of optimization is well-studied, and there is a large body of literatu
 Since this document does not involve researching new optimization algorithms, the original references are not presented here.
 Instead, the information in this section is paraphrased from the Dakota User's Manual \cite{dakota}.
 
-Dakota is a toolkit devoloped by Sandia National Laboratories that provides an interface between simulation codes and iterative analysis methods.
+Dakota is a toolkit developed by Sandia National Laboratories that provides an interface between simulation codes and iterative analysis methods.
 The optimization capabilities of Dakota are used in this work.
+
+In the context of calculating perturbations in the detector response $\delta R$ to optimize nuclear systems, the optimization algorithm determines what amount of perturbation causes the results to no longer be accurate enough, and it determines what perturbations to make for each iteration of the solver.
 
 %===============================================================================
 \subsection{Mathematical Formulation}
@@ -50,7 +52,7 @@ Equality constraints indicate that some function of the design variables must be
 For example, $2x_1 + \frac{x_2}{x_3} = -5.5$ and $3x_1 - \frac{1}{2}x_2 = 6$ would be equality constraints.
 Inequality constraints indicate that some function of the design variables must be less than or greater than a number.
 For example, $x_1 + x_2 < 5$ and $x_1 * x_2 > 10$ would be inequality constraints.
-Inequality constraints are said to be "two-sided" because they contain both lower and upper bounds.
+Inequality constraints are said to be ``two-sided'' because they contain both lower and upper bounds.
 
 The \textit{linear equality constraints} create a linear system $\textbf{A}_e\textbf{x}$, where ${\textbf{A}_e}$ is the coefficient matrix for the linear system, and which has target values specified by ${\textbf{a}_t}$.
 The \textit{nonlinear equality constraints} ${\textbf{h}\left(\textbf{x}\right)}$ have target values specified by $\textbf{h}_t$.
