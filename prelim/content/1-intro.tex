@@ -1,5 +1,11 @@
+%###############################################################################
 \chapter{Introduction}
 \label{chap:intro}
+%###############################################################################
+
+When designing a new nuclear system, it is often necessary to perform many parametric studies of Monte Carlo simulations in order to approach an optimal configuration of geometry and materials.
+This process is referred to as ``human-guided optimization.''
+This type of optimization is often very computationally expensive, given that each data point in the parametric study requires its own Monte Carlo simulation, and it also often requires a human to spend large amounts of time determining what parameters to tweak on the path towards optimality.
 
 When analyzing nuclear systems such as fission reactors, fusion reactors, and accelerators, it is usually necessary to use a Monte Carlo code like MCNP \cite{mcnp620} to predict system performance.
 Monte Carlo codes use the Monte Carlo method, which is a stochastic method which involves simulating individual particles and inferring results from their average behavior.
@@ -9,24 +15,32 @@ Thus, it can take a long time (computer years in the most complicated systems) i
 These computing requirements are usually managed by utilizing the resources of a computer cluster.
 
 Another class of radiation transport methods is known as deterministic methods.
-Deterministic solvers like Denovo \cite{denovo} solve the transport equation directly, and they generally produce detailed solutions throughout the entire phase space (space, angle, and energy) of a problem.
-However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces approximations in the results.
-Additionally, their angular discretization schemes may cause the results to exhibit non-physical features such as ray effects and negative fluxes.
+Deterministic solvers like Denovo \cite{denovo} solve the transport equation directly, and they can produce detailed solutions throughout the entire phase space (space, angle, and energy) of a problem.
+However, in order to do this, they must first discretize the geometry, angles, and energy space, and this discretization introduces approximations which may cause the results to exhibit non-physical features such as ray effects and negative fluxes.
 For these reasons, deterministic methods are rarely suitable by themselves for use in the analysis of complex nuclear systems.
 
 However, deterministic transport has been proven to be very useful when used in conjunction with Monte Carlo simulations in so-called ``hybrid methods.''
-For example, in deep penetration problems (with which Monte Carlo methods have considerable difficulty,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
+For example, in deep penetration problems (with which Monte Carlo methods have considerable difficulty because the probability of any given source particle contributing to the response is low,) deterministic methods can be used to solve the forward and adjoint transport equations and generate weight window parameters for use in Monte Carlo radiation transport (i.e. the FW-CADIS method \cite{fwcadis} in the ADVANTG \cite{advantg} software package.)
 In these cases, it is not necessary that the deterministic solver produce a perfectly accurate solution because the end results are still derived from the Monte Carlo simulation; an approximate solution is sufficient.
 
-When a nuclear system is in the design phase, many parametric studies of Monte Carlo simulations must be performed in order to approach an optimal configuration of geometry and materials.
-This process is referred to as ``human-guided optimization.''
-These parametric studies can take an enormous amount of computational resources, given that each data point requires its own Monte Carlo simulation.
-
-The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization.
-The way this is done is by applying perturbation theory to the forward and adjoint transport equations to obtain perturbed versions of the transport equations.
-The perturbed transport equations can be used to calculate the change in some response $\delta R$ due to some change in cross sections $\delta\sigma$ at some location $\vec{r}$.
-Fundamental to this methodology is that once the forward and adjoint angular fluxes are known throughout the problem domain, the results of many different perturbations can be calculated all at once, without needing to recalculate the angular flux for each perturbation.
+The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization and reducing the need for human-guided optimization.
+The methodology involves applying perturbation theory to the forward and adjoint transport equations to obtain perturbed versions of the transport equations.
+The perturbed transport equations are used to calculate the change in some response $\delta R$ due to some change in cross sections $\delta\sigma$ at some location $\vec{r}$.
+Fundamental to this methodology is that once the forward and adjoint angular fluxes are known throughout the problem domain, the results of all possible small perturbations can be calculated at once without needing to recalculate the angular flux.
 Thus, a significant amount of insight into possible design improvements can be obtained from a single deterministic transport calculation.
+
+A single deterministic transport calculation is not sufficient, however, to produce a fully optimized solution.
+This is because the perturbed transport equations can only be considered valid if the total amount of perturbation is ``small.''
+Since it is likely that a significant portion of the geometry will need to be changed in order to produce an optimal solution, more deterministic transport calculations will need to be made in an iterative path to optimality to preserve the validity of the perturbed transport equations.
+
+An optimization toolkit like Dakota \cite{dakota}, which provides an interface between simulation codes and iterative analysis methods, is suitable for determining which perturbations to make in each iteration.
+There are many types of optimization algorithms designed for different purposes, but the goal of all of them is to minimize an objective function subject to some constraints, and they all use an iterative process to achieve this goal.
+The process begins with the user supplies some initial values for the design variables (variables the algorithm is allowed to change.)
+Then, each iteration involves having the simulation code calculate the response quantities (the objective function and other constraint functions) and then having the optimization solver generate new design variables to use for the next iteration.
+When the solver determines it can no longer make any progress in improving the solution, then the iteration stops.
+
+Gradient-based local optimization methods, which use gradient information to determine the design variables for the next iteration more efficiently, are appropriate for optimizing nuclear systems using the perturbed deterministic transport methodology.
+This is because $\delta R\left(\vec{r}\right)$ is the gradient of the objective function, and since this is calculated with every iteration, global gradient information is produced with every iteration.
 
 Here follows the layout of this document.
 Chapter \ref{chap:bg} first provides relevant background on radiation transport, perturbation theory as it applies to radiation transport, and shape optimization methods.
@@ -34,7 +48,6 @@ Chapter \ref{chap:dr} provides the mathematical basis for the geometry optimizat
 Chapter \ref{chap:testprob} introduces a simple test problem and shows the results of the optimization method.
 Lastly, Chapter \ref{chap:proposal} is the proposal for the additional work that will be done in order to complete the final dissertation.
 
-% Automated deterministic nuclear system optimizer
-% AUTODENSO
+% Automated deterministic nuclear system optimizer (AUTODENSO)
 
 % Using a novel methodology, create a toolset that can be used to automate the optimization of geometry to achieve specific objectives derived from nuclear responses.

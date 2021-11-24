@@ -1,5 +1,7 @@
+%###############################################################################
 \chapter{Research Proposal}
 \label{chap:proposal}
+%###############################################################################
 
 % The goal of this work is to extend the idea of using deterministic methods to speed up Monte Carlo radiation transport to the field of geometry optimization.
 % The way this is done is by applying perturbation theory to the forward and adjoint transport equations to obtain perturbed versions of the transport equations.
@@ -106,7 +108,18 @@ When interfacing with external programs, Dakota specifies design points by writi
 Thus, ADVANTG must be configured to be able to read these text files and modify the system accordingly.
 ADVANTG must also be configured to provide the results of the $\delta R\left(\vec{r}\right)$ calculation in a format that is readable by Dakota.
 
-Work will also need to be done in order to select the correct optimization algorithm and other options to be used by Dakota.
+%===============================================================================
+\subsection{Selecting the Right User Options}
+\label{sec:proposal:selecting_the_right_user_options}
+%===============================================================================
+
+There are a number of user options that need to be provided to Dakota.
+These option include the choice of method, the choice to use forward differencing or central differencing, and the choice of step size.
+There are four main categories of optimization methods for constrained problems, any of which could prove to be useful in this context: Sequential Quadratic Programming (SQP) methods, Newton methods, Method of Feasible Directions (MFD) methods, and the augmented Lagrangian method.
+Central differencing produces more reliable gradients than forward differencing, but takes twice as much computation time.
+The step size should be chosen to be small enough to allow for local accuracy and convergence but large enough that the optimal solution can be obtained in a reasonable amount of time.
+
+The effect these user options have on the quality of the result and the convergence time will need to be investigated.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Constraints and Complex Objective Functions}
@@ -123,22 +136,22 @@ Here are some examples of more complex goals:
   \item Minimize the ratio of Responses A and B.
         This would be achieved by setting $f = R_A/R_B$.
   \item Maximize Response A while requiring Response B to be below a threshold value $t_b$.
-        This could be encoded by setting \[f = \begin{cases} -R_A & \text{if } R_B < t_B \\ 0 & \text{if } R_B > t_B. \end{cases}\]
+        This could be encoded either by setting \[f = \begin{cases} -R_A & \text{if } R_B < t_B \\ 0 & \text{if } R_B > t_B \end{cases}\] or by setting $f = -R_A$ and encoding $R_B$ and $t_B$ in the nonlinear inequality constraints.
   \item Maximize the response $R$ while only allowing certain amounts of each material to exist in the problem, or while keeping the total ``cost'' of all materials below some threshold.
         These could be achieved with linear inequality constraints.
   \item Minimize the total ``cost'' of materials $C_\text{total}$ that results in a response $R$ being greater than some threshold value $R_\text{min}$.
-        This could be encoded by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min}. \end{cases}\]
+        This could be encoded either by setting \[f = \begin{cases} C_\text{total} & \text{if } R > R_\text{min} \\ \text{very large value} & \text{if } R < R_\text{min} \end{cases}\] or by setting $f = C_\text{total}$ and encoding $R$ and $R_\text{min}$ in the nonlinear inequality constraints.
 \end{enumerate}
 
 It will be necessary to add functionality to the toolset to allow for some or all of these types of goals.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Non-Fixed Source and Detector Locations}
-\label{sec:proposal:moving_source_and_detector}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Problems could be conceived where the locations of the source, detector, or both are not fixed in space.
-Additional equations will need to be derived and more functionality will needed to be added to the toolset to account for these types of problems.
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Non-Fixed Source and Detector Locations}
+% \label{sec:proposal:moving_source_and_detector}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Problems could be conceived where the locations of the source, detector, or both are not fixed in space.
+% Additional equations will need to be derived and more functionality will needed to be added to the toolset to account for these types of problems.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Calculation of $\delta R$ with Anisotropic Scattering}

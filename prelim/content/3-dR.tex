@@ -1,5 +1,7 @@
+%###############################################################################
 \chapter{Perturbation in the Detector Response}
 \label{chap:dr}
+%###############################################################################
 
 Section \ref{sec:bg:rt} introduced the transport equation and the concept of adjoint transport.
 Section \ref{sec:bg:pert} showed Greenspan's derivation of an equation for the perturbation in the detector response in operator notation.
@@ -174,10 +176,11 @@ Bringing the terms together yields the final equation for $\delta R\left(\vec{r}
 Equation \ref{eq:dr:dr_function_of_position_final} implies something profound: if $\psi$ and $\psi^+$ are known, then $\delta R$ can be calculated for any perturbations $\sigma_t$ and $\sigma_s$.
 Thus, $\psi$ and $\psi^+$ only need to be calculated a single time in order to calculate the effects of making any perturbation anywhere in the geometry.
 
-This result does not imply, however, that a single calculation of $\psi$ and $\psi^+$ is sufficient to fully optimize the geometry.
+This result does not imply, however, that a single deterministic calculation of $\psi$ and $\psi^+$ is sufficient to fully optimize the geometry.
 Discarding the perturbed second-order terms is only allowable if the perturbation is small.
 The more perturbations made at once, the larger the effect of the second-order terms, and the less accurate the calculation of $\delta R$.
 Since many perturbations throughout the geometry will be necessary to achieve an optimized solution, $\psi$ and $\psi^+$ will need to be recalculated periodically to reduce the effect of the second-order terms.
+Optimization software will need to be used to determine how often $\psi$ and $\psi^+$ need to be recalculated and what perturbations to make for each iteration.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementation}

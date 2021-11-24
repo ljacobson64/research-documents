@@ -38,6 +38,15 @@ and
 \end{equation}
 where $\bar{H}$ is the perturbed transport operator, $\bar{\psi}$ is the perturbed flux, $\bar{H}^+$ is the perturbed adjoint transport operator, and $\bar{\psi}^+$ is the perturbed adjoint flux.
 
+The perturbation in the flux $\delta\psi$ is defined as the difference between the flux in the perturbed system and the flux in the unperturbed system, and the perturbation in the transport operator $\delta H$ is defined similarly as the difference between the perturbed transport operator and the unperturbed transport operator; i.e.
+\begin{equation}\label{eq:bg:pt:delta_psi}
+  \delta \psi \equiv \bar{\psi} - \psi
+\end{equation}
+and
+\begin{equation}\label{eq:bg:pt:delta_H}
+  \delta H \equiv \bar{H} - H.
+\end{equation}
+
 Combining Equations \ref{eq:bg:pt:green29} and \ref{eq:bg:pt:green29_perturbed}, rearranging terms, and discarding the second-order term $\delta H\delta\psi$ yields the following identity:
 \begin{equation}\label{eq:bg:pt:green44a}\begin{split}
   H\psi       & = \bar{H}\bar{\psi} \\
@@ -46,10 +55,8 @@ Combining Equations \ref{eq:bg:pt:green29} and \ref{eq:bg:pt:green29_perturbed},
   0           & = H\delta\psi + \delta H\psi \\
   H\delta\psi & = -\delta H\psi.
 \end{split}\end{equation}
-
 It is only appropriate to discard the second-order term $\delta H\delta\psi$ if the perturbation is ``small.''
-If a large perturbation is made, or if many small perturbations are made at once, then Equation \ref{eq:bg:pt:green44a} is no longer valid.
-What it means for a perturbation to be ``small'' will be discussed in Section \ref{sec:bg:opt}.
+The larger the perturbation, the less valid Equation \ref{eq:bg:pt:green44a} is.
 
 If a detector has a response function $q^+$, then the detector response $R$ to an external source $q$ in the unperturbed system is given by
 \begin{equation}\label{eq:bg:pt:green168}
@@ -66,26 +73,20 @@ The perturbation in the detector response $\delta R$ is defined as the differenc
 \begin{equation}\label{eq:bg:pt:delta_r}
   \delta R \equiv \bar{R} - R.
 \end{equation}
-Similarly, the perturbation in the flux $\delta\psi$ is defined as the difference between the flux in the perturbed system and the flux in the unperturbed system; i.e.
-\begin{equation}\label{eq:bg:pt:delta_psi}
-  \delta \psi \equiv \bar{\psi} - \psi.
-\end{equation}
-Lastly, the perturbation in the transport operator $\delta H$ is defined as the difference between the perturbed transport operator and the unperturbed transport operator; i.e.
-\begin{equation}\label{eq:bg:pt:delta_H}
-  \delta H \equiv \bar{H} - H.
-\end{equation}
 
 $\delta R$ can thus be written as
 \begin{equation}\label{eq:bg:pt:green170a}\begin{split}
-  \delta R & = \left<\bar{\psi},q^+\right> - \left<\psi,q^+\right> \\
-           & = \left<\delta\psi,q^+\right> \\
-           & \stackrel{\includegraphics[height=\fontcharht\font`\B]{../pres-2019.08.30/thinking-face.png}}{=} \left<\psi^+,-\delta H\psi\right>
+  \delta R & = \left<\bar{\psi}^+,q\right> - \left<\psi^+,q\right> \\
+           & = \left<\delta\psi^+,q\right> \\
+         % & \stackrel{\includegraphics[height=\fontcharht\font`\B]{../pres-2019.08.30/thinking-face.png}}{=} \left<\psi^+,-\delta H\psi\right>
+           & = \left<\psi^+,-\delta H\psi\right>
 \end{split}\end{equation}
 or similarly as
 \begin{equation}\label{eq:bg:pt:green170b}\begin{split}
-  \delta R & = \left<\bar{\psi}^+,q\right> - \left<\psi^+,q\right> \\
-           & = \left<\delta\psi^+,q\right> \\
-           & \stackrel{\includegraphics[height=\fontcharht\font`\B]{../pres-2019.08.30/thinking-face.png}}{=} \left<\psi,-\delta H^+\psi^+\right>.
+  \delta R & = \left<\bar{\psi},q^+\right> - \left<\psi,q^+\right> \\
+           & = \left<\delta\psi,q^+\right> \\
+         % & \stackrel{\includegraphics[height=\fontcharht\font`\B]{../pres-2019.08.30/thinking-face.png}}{=} \left<\psi,-\delta H^+\psi^+\right>.
+           & = \left<\psi,-\delta H^+\psi^+\right>.
 \end{split}\end{equation}
 These expressions for $\delta R$ are powerful because they depend only on the unperturbed forward and adjoint flux distributions.
 Thus, the effects of many different perturbations can be calculated efficiently while only needing to calculate the forward and adjoint flux distributions once.

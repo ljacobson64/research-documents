@@ -9,9 +9,7 @@ Since this document does not involve researching new optimization algorithms, th
 Instead, the information in this section is paraphrased from the Dakota User's Manual \cite{dakota}.
 
 Dakota is a toolkit developed by Sandia National Laboratories that provides an interface between simulation codes and iterative analysis methods.
-The optimization capabilities of Dakota are used in this work.
-
-In the context of calculating perturbations in the detector response $\delta R$ to optimize nuclear systems, the optimization algorithm determines what amount of perturbation causes the results to no longer be accurate enough, and it determines what perturbations to make for each iteration of the solver.
+The optimization capabilities of Dakota will be used in this work.
 
 %===============================================================================
 \subsection{Mathematical Formulation}
@@ -118,5 +116,12 @@ For unconstrained and bound-constrained problems, conjugate gradient methods are
 In the conjugate gradient method, the subproblems minimize a quadratic function over a space defined by the gradient and directions that are mutually conjugate with respect to the Hessian.
 For constrained problems, there are several categories of methods which will not be described in detail here: Sequential Quadratic Programming (SQP) methods, Newton methods, Method of Feasible Directions (MFD) methods, and the augmented Lagrangian method.
 
-% Section 6.3.1: Multiobjective Optimization
-% Section 6.4:   Optimization Usage Guidelines
+% %===============================================================================
+% \subsection{Multiobjective Optimization}
+% \label{sec:bg:opt:multi_opt}
+% %===============================================================================
+
+% %===============================================================================
+% \subsection{Optimization Usage Guidelines}
+% \label{sec:bg:opt:usage_guidelines}
+% %===============================================================================
